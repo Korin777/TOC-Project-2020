@@ -37,6 +37,9 @@ machine = TocMachine(
 
 app = Flask(__name__, static_url_path="")
 
+# os.environ['LINE_CHANNEL_SECRET'] = 'b98212fb58db63b10770e6ab8abf47d7'
+# os.environ['LINE_CHANNEL_ACCESS_TOKEN'] = 'VzJCjfnMQl2ILx68AdawvJEWf9f8LIH9w3Ue3wdkJHkoOBP8U4DCMrtLaQN7d2JtORLTTCW0vU5cOiXNtVEbF03/Qg6nIAXphWI8D1PWMUa7tXzx9XFnWXNV3pfhDrFiXRyqLv6L82qQXOhdGgOfHwdB04t89/1O/w1cDnyilFU='
+
 
 # get channel_secret and channel_access_token from your environment variable
 channel_secret = os.getenv("LINE_CHANNEL_SECRET", None)
@@ -50,6 +53,10 @@ if channel_access_token is None:
 
 line_bot_api = LineBotApi(channel_access_token)
 parser = WebhookParser(channel_secret)
+
+# @app.route("/")
+# def home():
+#     return "hello flask"
 
 
 @app.route("/callback", methods=["POST"])
@@ -116,6 +123,6 @@ def show_fsm():
 
 
 if __name__ == "__main__":
-    port = os.environ['PORT']
-    # port = os.environ.get("PORT", 8000)
+    port = os.environ.get("PORT", 8000)
     app.run(host="0.0.0.0", port=port, debug=True)
+    # app.run()
