@@ -7,9 +7,15 @@ class TocMachine(GraphMachine):
     def __init__(self, **machine_configs):
         self.machine = GraphMachine(model=self, **machine_configs)
 
-    def on_enter_initial(self,event):
+    def is_going_to_menu(self, event):
+        text = event.message.text
+        return text.lower() == "menu"
+    
+    def on_enter_menu(self, event):
+        print("I'm entering menu")
         reply_token = event.reply_token
-        send_text_message(reply_token, "HELLO")
+        send_text_message(reply_token, "menu")
+        
 
     def is_going_to_state1(self, event):
         text = event.message.text
