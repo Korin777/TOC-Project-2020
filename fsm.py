@@ -8,6 +8,7 @@ class TocMachine(GraphMachine):
         self.machine = GraphMachine(model=self, **machine_configs)
 
     def on_enter_initial(self,event):
+        reply_token = event.reply_token
         send_text_message(reply_token, "HELLO")
 
     def is_going_to_state1(self, event):
