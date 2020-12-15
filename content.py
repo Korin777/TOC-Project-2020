@@ -1,0 +1,42 @@
+menu = {
+    "type":"bubble",
+    "header": {
+        "type":"box",
+        "layout":"vertical",
+        "spacing":"md",
+        "contents":[
+            {
+                "type":"text",
+                "text":"Korin's Bot",
+                "size":"lg",
+                "weight":"bold",
+                "color":"#c70039"
+            }
+        ]
+    },
+    "body":{
+        "type":"box",
+        "layout":"vertical",
+        "spacing":"md",
+        "contents":[
+            {
+                "type":"separator",
+                "color":"#c70039",
+            },
+            {
+                "type":"text",
+                "text":"第一個物件",
+                "size":"md"              
+            },
+            {
+                "type":"separator",
+                "color":"#c70039"
+            },
+            {
+                "type":"text",
+                "text":"第二個物件",
+                "size":"md"              
+            }        
+        ]
+    }
+}

@@ -1,6 +1,8 @@
 from transitions.extensions import GraphMachine
 
-from utils import send_text_message
+from utils import send_text_message, send_flex_message
+
+from content import menu
 
 
 class TocMachine(GraphMachine):
@@ -14,7 +16,7 @@ class TocMachine(GraphMachine):
     def on_enter_menu(self, event):
         print("I'm entering menu")
         reply_token = event.reply_token
-        send_text_message(reply_token, "menu")
+        send_flex_message(reply_token, f"menu", menu)
         
 
     def is_going_to_state1(self, event):
