@@ -2,7 +2,7 @@ from transitions.extensions import GraphMachine
 
 from utils import send_text_message, send_flex_message
 
-from content import menu
+from content import menu,pixiv,find_pixiv_id
 
 
 class TocMachine(GraphMachine):
@@ -17,7 +17,24 @@ class TocMachine(GraphMachine):
         print("I'm entering menu")
         reply_token = event.reply_token
         send_flex_message(reply_token, f"menu", menu)
+
+    def is_going_to_pixiv(self, event):
+        text = event.message.text
+        return text.lower() == "pixiv"
+    
+    def on_enter_pixiv(self, event):
+        print("I'm entering pixiv")
+        reply_token = event.reply_token
+        send_flex_message(reply_token, f"pixiv", pixiv)    
         
+    def is_going_to_find_pixiv_id(self, event):
+        text = event.message.text
+        return text.lower() == "find_pixiv_id"
+    
+    def on_enter_find_pixiv_id(self, event):
+        print("I'm entering find_pixiv_id")
+        reply_token = event.reply_token
+        send_flex_message(reply_token, f"find_pixiv_id", find_pixiv_id)
 
     def is_going_to_state1(self, event):
         text = event.message.text
