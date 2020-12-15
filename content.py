@@ -51,7 +51,7 @@ pixiv = {
       "size": "giga",
       "hero": {
         "type": "image",
-        "url": "https://s.pximg.net/www/js/build/14e52f8ff79c3dc931eb16c6f4b53890.svg",
+        "url": "https://i.imgur.com/lFq9NTg.jpg",
         "size": "full",
         "aspectMode": "fit",
         "action": {
