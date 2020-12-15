@@ -117,7 +117,7 @@ pixiv = {
       "size": "giga",
       "hero": {
         "type": "image",
-        "url": "https://i.pximg.net/c/250x250_80_a2/img-master/img/2020/12/13/12/31/59/86271203_p0_square1200.jpg#",
+        "url": "https://i.imgur.com/oHHT8Lr.jpg#",
         "size": "full",
         "aspectMode": "fit",
         "action": {
