@@ -22,6 +22,7 @@ machine = TocMachine(
         {"trigger": "advance", "source": "menu", "dest": "state1", "conditions": "is_going_to_state1"},
         {"trigger": "advance","source": "menu","dest": "state2","conditions": "is_going_to_state2"},
         {"trigger": "go_back", "source": ["pixiv", "state2"], "dest": "initial"},
+        {"trigger": "advance", "source": ["pixiv", "state2","find_pixiv_id"], "dest": "menu", "conditions": "is_going_to_menu"}
     ],
     initial="initial",
     auto_transitions=False,
