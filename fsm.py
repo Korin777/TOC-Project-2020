@@ -36,18 +36,6 @@ class TocMachine(GraphMachine):
         reply_token = event.reply_token
         send_flex_message(reply_token, f"find_pixiv_id", find_pixiv_id)
 
-    def is_going_to_state1(self, event):
-        text = event.message.text
-        return text.lower() == "go to state1"
-
-    def on_enter_state1(self, event):
-        print("I'm entering state1")
-        reply_token = event.reply_token
-        send_text_message(reply_token, "Trigger state1")
-        self.go_back()
-
-    def on_exit_state1(self):
-        print("Leaving state1")
 
     def is_going_to_state2(self, event):
         text = event.message.text
