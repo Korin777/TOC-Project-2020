@@ -165,7 +165,7 @@ find_pixiv_id = {
     "type": "bubble",
     "hero": {
         "type": "image",
-        "url": "https://s.pximg.net/www/js/build/14e52f8ff79c3dc931eb16c6f4b53890.svg",
+        "url": "https://s.pximg.net/www/js/build/14e52f8ff79c3dc931eb16c6f4b53890.svg#",
         "size": "full",
         "aspectMode": "fit",
         "action": {
@@ -204,8 +204,7 @@ find_pixiv_id = {
             }
             ]
         }
-        ],
-        "offsetTop": "-80px"
+        ]
     },
     "footer": {
         "type": "box",
