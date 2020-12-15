@@ -51,7 +51,7 @@ pixiv = {
       "size": "giga",
       "hero": {
         "type": "image",
-        "url": "https://i.imgur.com/lFq9NTg.jpg",
+        "url": "https://s.pximg.net/www/js/build/14e52f8ff79c3dc931eb16c6f4b53890.svg#",
         "size": "full",
         "aspectMode": "fit",
         "action": {
@@ -117,7 +117,7 @@ pixiv = {
       "size": "giga",
       "hero": {
         "type": "image",
-        "url": "https://i.pximg.net/img-master/img/2020/12/13/15/32/26/86274118_p0_master1200.jpg",
+        "url": "https://i.pximg.net/img-master/img/2020/12/13/15/32/26/86274118_p0_master1200.jpg#",
         "size": "full",
         "aspectMode": "fit",
         "action": {
