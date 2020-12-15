@@ -84,7 +84,7 @@ pixiv = {
               {
                 "type": "text",
                 "text": "找作品",
-                "wrap": true,
+                "wrap": True,
                 "color": "#666666",
                 "size": "md"
               }
@@ -149,7 +149,7 @@ pixiv = {
               {
                 "type": "text",
                 "text": "網址",
-                "wrap": true,
+                "wrap": True,
                 "color": "#666666",
                 "size": "md"
               }
@@ -198,7 +198,7 @@ find_pixiv_id = {
             {
                 "type": "text",
                 "text": "找作品",
-                "wrap": true,
+                "wrap": True,
                 "color": "#666666",
                 "size": "md"
             }
