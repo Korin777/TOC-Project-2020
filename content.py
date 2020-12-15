@@ -117,7 +117,7 @@ pixiv = {
       "size": "giga",
       "hero": {
         "type": "image",
-        "url": "https://i.pximg.net/img-master/img/2020/12/13/15/32/26/86274118_p0_master1200.jpg#",
+        "url": "https://i.pximg.net/c/250x250_80_a2/img-master/img/2020/12/13/12/31/59/86271203_p0_square1200.jpg#",
         "size": "full",
         "aspectMode": "fit",
         "action": {
@@ -165,7 +165,7 @@ find_pixiv_id = {
     "type": "bubble",
     "hero": {
         "type": "image",
-        "url": "https://s.pximg.net/www/js/build/14e52f8ff79c3dc931eb16c6f4b53890.svg#",
+        "originalContentUrl": "https://s.pximg.net/www/js/build/14e52f8ff79c3dc931eb16c6f4b53890.svg#",
         "size": "full",
         "aspectMode": "fit",
         "action": {
