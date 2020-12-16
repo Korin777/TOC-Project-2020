@@ -51,12 +51,12 @@ pixiv = {
       "size": "giga",
       "hero": {
         "type": "image",
-        "url": "https://s.pximg.net/www/js/build/14e52f8ff79c3dc931eb16c6f4b53890.svg#",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Pixiv_logo.svg/154px-Pixiv_logo.svg.png",
         "size": "50%",
         "aspectMode": "fit",
         "action": {
           "type": "uri",
-          "uri": "http://linecorp.com/"
+          "uri": "https://www.pixiv.net/"
         }
       },
       "body": {
@@ -163,12 +163,12 @@ find_pixiv_id = {
     "type": "bubble",
     "hero": {
         "type": "image",
-        "url": "https://s.pixiv.cat/www/js/build/14e52f8ff79c3dc931eb16c6f4b53890.svg#",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Pixiv_logo.svg/154px-Pixiv_logo.svg.png",
         "size": "50%",
         "aspectMode": "fit",
         "action": {
         "type": "uri",
-        "uri": "http://linecorp.com/"
+        "uri": "https://www.pixiv.net/"
         }
     },
     "body": {
