@@ -35,10 +35,10 @@ class TocMachine(GraphMachine):
         reply_token = event.reply_token
         send_text_message(reply_token, "正在進入Pixiv請稍後...")
         time.sleep(3)
-        container = driver.find_element_by_class_name("gtm-toppage-thumbnail-illustration-recommend-works-zone")
+        container = self.driver.find_element_by_class_name("gtm-toppage-thumbnail-illustration-recommend-works-zone")
         picture = container.find_elements_by_tag_name("img")
-        title = driver.find_elements_by_class_name("iasfms-4.hegAwd.gtm-toppage-thumbnail-illustration-recommend-works")
-        artist = driver.find_elements_by_class_name("sc-1rx6dmq-2.eMBcTW.gtm-illust-recommend-user-name")
+        title = self.driver.find_elements_by_class_name("iasfms-4.hegAwd.gtm-toppage-thumbnail-illustration-recommend-works")
+        artist = self.driver.find_elements_by_class_name("sc-1rx6dmq-2.eMBcTW.gtm-illust-recommend-user-name")
         picture_url = []
         icon_url = []
         title_name = []
