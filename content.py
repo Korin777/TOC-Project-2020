@@ -57,8 +57,7 @@ pixiv = {
         "action": {
           "type": "uri",
           "uri": "http://linecorp.com/"
-        },
-        "offsetTop": "-40px"
+        }
       },
       "body": {
         "type": "box",
@@ -166,13 +165,12 @@ find_pixiv_id = {
     "hero": {
         "type": "image",
         "originalContentUrl": "https://s.pixiv.cat/www/js/build/14e52f8ff79c3dc931eb16c6f4b53890.svg#",
-        "size": "full",
+        "size": "50%",
         "aspectMode": "fit",
         "action": {
         "type": "uri",
         "uri": "http://linecorp.com/"
-        },
-        "offsetTop": "-40px"
+        }
     },
     "body": {
         "type": "box",
