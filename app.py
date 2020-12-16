@@ -11,13 +11,6 @@ from fsm import TocMachine
 from utils import send_text_message
 
 
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-import time
-import requests
-from bs4 import BeautifulSoup
-
-
 load_dotenv()
 
 
