@@ -4,6 +4,8 @@ from utils import send_text_message, send_flex_message
 
 from content import menu,pixiv,find_pixiv_id
 
+import scraw
+
 
 class TocMachine(GraphMachine):
     def __init__(self, **machine_configs):
@@ -24,7 +26,9 @@ class TocMachine(GraphMachine):
     
     def on_enter_pixiv(self, event):
         print("I'm entering pixiv")
+        picture_url= scraw.get_pixiv_picture_url()
         reply_token = event.reply_token
+        pixiv["contents"][1]["hero"]["url"] = picture_url[0]
         send_flex_message(reply_token, f"pixiv", pixiv)    
         
     def is_going_to_find_pixiv_id(self, event):

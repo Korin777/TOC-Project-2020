@@ -10,6 +10,14 @@ from linebot.models import MessageEvent, TextMessage, TextSendMessage
 from fsm import TocMachine
 from utils import send_text_message
 
+
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+import time
+import requests
+from bs4 import BeautifulSoup
+
+
 load_dotenv()
 
 
@@ -118,4 +126,3 @@ def show_fsm():
 if __name__ == "__main__":
     port = os.environ.get("PORT", 8000)
     app.run(host="0.0.0.0", port=port, debug=True)
-    # app.run()
