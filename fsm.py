@@ -6,14 +6,13 @@ from content import menu,pixiv,find_pixiv_id
 
 # import scraw
 
-from app import driver
-
 import time
 
 
 class TocMachine(GraphMachine):
-    def __init__(self, **machine_configs):
+    def __init__(self, driver,**machine_configs):
         self.machine = GraphMachine(model=self, **machine_configs)
+        self.driver = driver
 
     def is_going_to_menu(self, event):
         text = event.message.text
@@ -33,12 +32,12 @@ class TocMachine(GraphMachine):
         # picture_url= scraw.get_pixiv_picture_url()
         time.sleep(3)
 
-        input = driver.find_element_by_id("LoginComponent").find_elements_by_tag_name("input")
+        input = self.driver.find_element_by_id("LoginComponent").find_elements_by_tag_name("input")
         input[0].send_keys('k777k777tw123@gmail.com')
         input[1].send_keys('ko95701ko')
         input[1].submit()
         time.sleep(8)
-        container = driver.find_element_by_class_name("gtm-toppage-thumbnail-illustration-recommend-works-zone")
+        container = self.driver.find_element_by_class_name("gtm-toppage-thumbnail-illustration-recommend-works-zone")
         picture = container.find_elements_by_tag_name("img")
         picture_url = []
         j = 0

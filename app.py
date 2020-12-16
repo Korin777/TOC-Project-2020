@@ -11,6 +11,11 @@ from linebot.models import MessageEvent, TextMessage, TextSendMessage
 from selenium import webdriver
 import time
 import requests
+
+from fsm import TocMachine
+from utils import send_text_message
+
+
 chrome_options = webdriver.ChromeOptions()
 chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
 chrome_options.add_argument("--headless") #無頭模式
@@ -28,14 +33,10 @@ input[1].send_keys('ko95701ko')
 input[1].submit()
 
 
-from fsm import TocMachine
-from utils import send_text_message
-
-
 load_dotenv()
 
 
-machine = TocMachine(
+machine = TocMachine(driver = driver,
     states=["initial", "menu", "pixiv", "find_pixiv_id", "state2"],
     transitions=[
         {"trigger": "advance", "source": "initial", "dest": "menu", "conditions": "is_going_to_menu"},
