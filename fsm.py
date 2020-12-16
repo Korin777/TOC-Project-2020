@@ -4,7 +4,11 @@ from utils import send_text_message, send_flex_message
 
 from content import menu,pixiv,find_pixiv_id
 
-import scraw
+# import scraw
+
+from app import driver
+
+import time
 
 
 class TocMachine(GraphMachine):
@@ -26,7 +30,24 @@ class TocMachine(GraphMachine):
     
     def on_enter_pixiv(self, event):
         print("I'm entering pixiv")
-        picture_url= scraw.get_pixiv_picture_url()
+        # picture_url= scraw.get_pixiv_picture_url()
+        time.sleep(3)
+
+        input = driver.find_element_by_id("LoginComponent").find_elements_by_tag_name("input")
+        input[0].send_keys('k777k777tw123@gmail.com')
+        input[1].send_keys('ko95701ko')
+        input[1].submit()
+        time.sleep(8)
+        container = driver.find_element_by_class_name("gtm-toppage-thumbnail-illustration-recommend-works-zone")
+        picture = container.find_elements_by_tag_name("img")
+        picture_url = []
+        j = 0
+        for i in range(len(picture)):
+            if(picture[i].get_attribute("class") == "rp5asc-10 leQnFG"):
+                picture_url.append(picture[i].get_attribute("src"))
+                picture_url[j] = "https://i.pixiv.cat/img-master" + picture_url[j][picture_url[j].find("/img/"):picture_url[j].rfind("_p0_")] + "_p0_master1200.jpg"
+                print(picture_url[j])
+                j += 1
         reply_token = event.reply_token
         pixiv["contents"][1]["hero"]["url"] = picture_url[0]
         send_flex_message(reply_token, f"pixiv", pixiv)    

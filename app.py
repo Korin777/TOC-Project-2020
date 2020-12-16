@@ -7,6 +7,27 @@ from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 
+
+from selenium import webdriver
+import time
+import requests
+chrome_options = webdriver.ChromeOptions()
+chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+chrome_options.add_argument("--headless") #無頭模式
+chrome_options.add_argument("--disable-dev-shm-usage")
+chrome_options.add_argument("--no-sandbox")
+driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+url = 'https://accounts.pixiv.net/login?return_to=https%3A%2'+"F%"+"2Fwww.pixiv.net"+"%"+'2F&lang=zh_tw&source=pc&view_type=page'
+# driver = webdriver.Chrome('./chromedriver', chrome_options=options)
+driver.get(url)
+time.sleep(3)
+
+input = driver.find_element_by_id("LoginComponent").find_elements_by_tag_name("input")
+input[0].send_keys('k777k777tw123@gmail.com')
+input[1].send_keys('ko95701ko')
+input[1].submit()
+
+
 from fsm import TocMachine
 from utils import send_text_message
 
