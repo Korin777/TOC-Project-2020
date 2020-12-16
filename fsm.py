@@ -13,6 +13,8 @@ class TocMachine(GraphMachine):
     def __init__(self, driver,**machine_configs):
         self.machine = GraphMachine(model=self, **machine_configs)
         self.driver = driver
+        print(driver)
+        print(self.driver)
 
     def is_going_to_menu(self, event):
         text = event.message.text
@@ -29,6 +31,7 @@ class TocMachine(GraphMachine):
     
     def on_enter_pixiv(self, event):
         print("I'm entering pixiv")
+        print(self.driver)
         # picture_url= scraw.get_pixiv_picture_url()
         time.sleep(3)
 
