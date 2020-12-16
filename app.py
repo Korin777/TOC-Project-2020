@@ -33,6 +33,7 @@ input[0].send_keys('k777k777tw123@gmail.com')
 input[1].send_keys('ko95701ko')
 input[1].submit()
 
+time.sleep(8)
 
 load_dotenv()
 

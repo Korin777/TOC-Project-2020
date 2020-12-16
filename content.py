@@ -158,7 +158,7 @@ pixiv = {
     }
   ]
 }
-print(pixiv["contents"][1]["hero"]["url"])
+
 
 find_pixiv_id = {
     "type": "bubble",
