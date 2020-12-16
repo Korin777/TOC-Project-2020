@@ -52,7 +52,7 @@ pixiv = {
       "hero": {
         "type": "image",
         "url": "https://s.pximg.net/www/js/build/14e52f8ff79c3dc931eb16c6f4b53890.svg#",
-        "size": "full",
+        "size": "50%",
         "aspectMode": "fit",
         "action": {
           "type": "uri",
@@ -89,8 +89,7 @@ pixiv = {
               }
             ]
           }
-        ],
-        "offsetTop": "-80px"
+        ]
       },
       "footer": {
         "type": "box",
@@ -164,7 +163,7 @@ find_pixiv_id = {
     "type": "bubble",
     "hero": {
         "type": "image",
-        "originalContentUrl": "https://s.pixiv.cat/www/js/build/14e52f8ff79c3dc931eb16c6f4b53890.svg#",
+        "url": "https://s.pixiv.cat/www/js/build/14e52f8ff79c3dc931eb16c6f4b53890.svg#",
         "size": "50%",
         "aspectMode": "fit",
         "action": {
