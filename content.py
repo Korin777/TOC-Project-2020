@@ -83,7 +83,6 @@ pixiv = {
               {
                 "type": "text",
                 "text": "找作品",
-                "wrap": True,
                 "color": "#666666",
                 "size": "md"
               }
@@ -94,7 +93,7 @@ pixiv = {
       "footer": {
         "type": "box",
         "layout": "vertical",
-        "spacing": "sm",
+        "spacing": "md",
         "contents": [
           {
             "type": "button",
@@ -114,14 +113,24 @@ pixiv = {
       "type": "bubble",
       "size": "giga",
       "hero": {
-        "type": "image",
-        "url": "https://i.pixiv.cat/img-master/img/2020/12/13/15/32/26/86274118_p0_master1200.jpg#",
-        "size": "full",
-        "aspectMode": "fit",
-        "action": {
-          "type": "uri",
-          "uri": "https://i.pixiv.cat/img-master/img/2020/12/13/15/32/26/86274118_p0_master1200.jpg#"
-        }
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "image",
+            "url": "https://i.pixiv.cat/img-master/img/2020/12/13/15/32/26/86274118_p0_master1200.jpg#",
+            "size": "full",
+            "aspectMode": "fit",
+            "action": {
+              "type": "uri",
+              "uri": "https://i.pixiv.cat/img-master/img/2020/12/13/15/32/26/86274118_p0_master1200.jpg#"
+            }
+          }
+        ],
+        "spacing": "none",
+        "margin": "none",
+        "paddingAll": "0px",
+        "backgroundColor": "#F0F0F0F0"
       },
       "body": {
         "type": "box",
@@ -129,36 +138,68 @@ pixiv = {
         "contents": [
           {
             "type": "text",
-            "text": "繪師名稱",
-            "weight": "bold",
-            "size": "xl"
+            "text": "12345",
+            "align": "center",
+            "contents": [],
+            "size": "xl",
+            "offsetBottom": "5px",
+            "action": {
+              "type": "uri",
+              "label": "action",
+              "uri": "http://linecorp.com/"
+            }
+          },
+          {
+            "type": "separator",
+            "margin": "sm",
+            "color": "#c70039"
+          }
+        ],
+        "backgroundColor": "#F0F0F0F0"
+      },
+      "footer": {
+        "type": "box",
+        "layout": "horizontal",
+        "contents": [
+          {
+            "type": "box",
+            "layout": "horizontal",
+            "contents": [
+              {
+                "type": "image",
+                "url": "https://i.pixiv.cat/user-profile/img/2020/01/16/23/25/09/16863083_5d7fb313ca00a0e1a7c7d9e4d32384a5_170.jpg",
+                "action": {
+                  "type": "uri",
+                  "label": "action",
+                  "uri": "http://linecorp.com/"
+                }
+              }
+            ],
+            "width": "72px",
+            "height": "72px",
+            "cornerRadius": "100px"
           },
           {
             "type": "box",
             "layout": "vertical",
-            "spacing": "sm",
+            "spacing": "md",
             "contents": [
               {
                 "type": "text",
-                "text": "作品名稱",
-                "color": "#666666",
-                "size": "md"
-              },
-              {
-                "type": "text",
-                "text": "網址",
-                "wrap": True,
-                "color": "#666666",
-                "size": "md"
+                "text": "繪師名稱",
+                "align": "center",
+                "margin": "md",
+                "contents": []
               }
-            ]
+            ],
+            "offsetTop": "20px"
           }
-        ]
+        ],
+        "backgroundColor": "#F0F0F0F0"
       }
     }
   ]
 }
-
 
 find_pixiv_id = {
     "type": "bubble",
@@ -223,3 +264,12 @@ find_pixiv_id = {
         "flex": 0
     }
 }
+
+print(pixiv["contents"][1]["footer"]["contents"][1]["contents"][0]["text"])
+# pixiv["contents"][i+1]["hero"]["contents"][0]["url"]
+# pixiv["contents"][i+1]["hero"]["contents"][0]["text"]
+# pixiv["contents"][i+1]["body"]["contents"][0]["text"]
+# pixiv["contents"][i+1]["body"]["contents"][0]["action"]["uri"]
+# pixiv["contents"][i+1]["footer"]["contents"][0]["contents"][0]["url"]
+# pixiv["contents"][i+1]["footer"]["contents"][0]["contents"][0]["action"]["uri"]
+# pixiv["contents"][i+1]["footer"]["contents"][1]["contents"][0]["text"]

@@ -26,7 +26,6 @@ print(driver)
 url = 'https://accounts.pixiv.net/login?return_to=https%3A%2'+"F%"+"2Fwww.pixiv.net"+"%"+'2F&lang=zh_tw&source=pc&view_type=page'
 # driver = webdriver.Chrome('./chromedriver', chrome_options=options)
 driver.get(url)
-time.sleep(3)
 
 input = driver.find_element_by_id("LoginComponent").find_elements_by_tag_name("input")
 input[0].send_keys('k777k777tw123@gmail.com')
