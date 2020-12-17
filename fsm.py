@@ -1,6 +1,6 @@
 from transitions.extensions import GraphMachine
 
-from utils import send_text_message, send_flex_message
+from utils import send_text_message, send_flex_message, send_push_message
 
 from content import menu,pixiv,find_artwork_id, find_user_id
 
@@ -37,10 +37,11 @@ class TocMachine(GraphMachine):
     
     def on_enter_pixiv(self, event):
         print("I'm entering pixiv")
+        user_id = event.source.user_id
         if(not self.in_pixiv):
-            self.driver.refresh()
+            self.driver.get("https://www.pixiv.net/")
             reply_token = event.reply_token
-            # send_text_message(reply_token, "請稍後...")
+           send_push_message(user_id, TextSendMessage(text='請稍後回應...'))
             time.sleep(5)
 
             container = self.driver.find_element_by_class_name("gtm-toppage-thumbnail-illustration-recommend-works-zone")
@@ -106,7 +107,7 @@ class TocMachine(GraphMachine):
         print(url)
         reply_token = event.reply_token
         if(not IsConnection(url)):
-            print("fuck")
+            self.back_pixiv()
             send_text_message(reply_token,"此id不存在")
             return
         self.driver.get(url)
