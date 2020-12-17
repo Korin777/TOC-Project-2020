@@ -104,13 +104,14 @@ class TocMachine(GraphMachine):
         print(url)
         reply_token = event.reply_token
         if(not IsConnection(url)):
+            print("fuck")
             send_text_message(reply_token,"此id不存在")
             return
         self.driver.get(url)
-        error = self.driver.find_element_by_class_name("error-title")
-        if(len(error) != 0):
-            send_text_message(reply_token,"此id不存在")
-            return
+        # error = self.driver.find_element_by_class_name("error-title")
+        # if(len(error) != 0):
+        #     send_text_message(reply_token,"此id不存在")
+        #     return
         if(self.stay): #找作者
             tmp = self.driver.find_element_by_class_name("_2AOtfl9")
             twitter_url = tmp.find_element_by_tag_name("a").get_attribute("href")
@@ -157,8 +158,11 @@ def IsConnection(url):
     """
         檢查連線是否失敗。
     """
+    header={'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.235'}
     try:
-        urllib.request.urlopen(url)
+        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        urllib.request.urlopen(req)
     except urllib.request.HTTPError as e:
+        print(e.reason)
         return False
     return True
