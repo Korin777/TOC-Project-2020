@@ -100,12 +100,17 @@ class TocMachine(GraphMachine):
     
     def on_enter_find_pixiv_id(self, event):
         print("I'm entering find_pixiv_id")
-        url = "https://www.pixiv.net/" + event.message.text.replace(" ","/")
+        url = "https://www.pixiv.net/" + event.message.text.lower().replace(" ","/")
+        print(url)
         reply_token = event.reply_token
         if(not IsConnection(url)):
             send_text_message(reply_token,"此id不存在")
             return
         self.driver.get(url)
+        error = self.driver.find_element_by_class_name("error-title")
+        if(len(error) != 0):
+            send_text_message(reply_token,"此id不存在")
+            return
         if(self.stay): #找作者
             tmp = self.driver.find_element_by_class_name("_2AOtfl9")
             twitter_url = tmp.find_element_by_tag_name("a").get_attribute("href")
