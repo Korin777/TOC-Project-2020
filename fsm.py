@@ -16,7 +16,7 @@ class TocMachine(GraphMachine):
     def __init__(self, driver,**machine_configs):
         self.machine = GraphMachine(model=self, **machine_configs)
         self.driver = driver
-        self.stay = false
+        self.stay = False
         print(driver)
         print(self.driver)
 
