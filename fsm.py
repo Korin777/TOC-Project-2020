@@ -71,7 +71,7 @@ class TocMachine(GraphMachine):
             # print(artist_name[j],artist_page[j])
             j += 1
         for i in range(len(pixiv["contents"])-1):
-            pixiv["contents"][i+1]["hero"]["contents"][0]["url"] = picture_url[i+1]
+            pixiv["contents"][i+1]["hero"]["url"] = picture_url[i+1]
             pixiv["contents"][i+1]["body"]["contents"][0]["text"] = title_name[i+1]
             pixiv["contents"][i+1]["body"]["contents"][0]["action"]["uri"] = title_page[i+1]
             pixiv["contents"][i+1]["footer"]["contents"][0]["contents"][0]["url"] = icon_url[i+1]
