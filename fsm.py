@@ -17,6 +17,7 @@ class TocMachine(GraphMachine):
         self.machine = GraphMachine(model=self, **machine_configs)
         self.driver = driver
         self.stay = False
+        self.in_pixiv = False
         print(driver)
         print(self.driver)
 
@@ -26,6 +27,7 @@ class TocMachine(GraphMachine):
     
     def on_enter_menu(self, event):
         print("I'm entering menu")
+        self.in_pixiv = False
         reply_token = event.reply_token
         send_flex_message(reply_token, f"menu", menu)
 
@@ -35,60 +37,60 @@ class TocMachine(GraphMachine):
     
     def on_enter_pixiv(self, event):
         print("I'm entering pixiv")
-        self.driver.refresh()
-        reply_token = event.reply_token
-        # send_text_message(reply_token, "請稍後...")
-        time.sleep(5)
+        if(not self.in_pixiv):
+            self.driver.refresh()
+            reply_token = event.reply_token
+            # send_text_message(reply_token, "請稍後...")
+            time.sleep(5)
 
-        container = self.driver.find_element_by_class_name("gtm-toppage-thumbnail-illustration-recommend-works-zone")
-        picture = container.find_elements_by_tag_name("img")
-        title = self.driver.find_elements_by_class_name("iasfms-4.hegAwd.gtm-toppage-thumbnail-illustration-recommend-works")
-        artist = self.driver.find_elements_by_class_name("sc-1rx6dmq-2.eMBcTW.gtm-illust-recommend-user-name")
-        picture_url = []
-        icon_url = []
-        title_name = []
-        title_page = []
-        artist_name = []
-        artist_page = []
-        j = 0
-        k = 0
-        for i in range(len(picture)):
-            if(picture[i].get_attribute("class") == "rp5asc-10 leQnFG"):
-                picture_url.append(picture[i].get_attribute("src"))
-                picture_url[j] = "https://i.pixiv.cat/img-master" + picture_url[j][picture_url[j].find("/img/"):picture_url[j].rfind("_p0_")] + "_p0_master1200" + picture_url[j][-4:]
-                print(picture_url[j])
+            container = self.driver.find_element_by_class_name("gtm-toppage-thumbnail-illustration-recommend-works-zone")
+            picture = container.find_elements_by_tag_name("img")
+            title = self.driver.find_elements_by_class_name("iasfms-4.hegAwd.gtm-toppage-thumbnail-illustration-recommend-works")
+            artist = self.driver.find_elements_by_class_name("sc-1rx6dmq-2.eMBcTW.gtm-illust-recommend-user-name")
+            picture_url = []
+            icon_url = []
+            title_name = []
+            title_page = []
+            artist_name = []
+            artist_page = []
+            j = 0
+            k = 0
+            for i in range(len(picture)):
+                if(picture[i].get_attribute("class") == "rp5asc-10 leQnFG"):
+                    picture_url.append(picture[i].get_attribute("src"))
+                    picture_url[j] = "https://i.pixiv.cat/img-master" + picture_url[j][picture_url[j].find("/img/"):picture_url[j].rfind("_p0_")] + "_p0_master1200" + picture_url[j][-4:]
+                    print(picture_url[j])
+                    j += 1
+                else:
+                    icon_url.append(picture[i].get_attribute("src"))
+                    icon_url[k] = "https://i.pixiv.cat" + icon_url[k][icon_url[k].find("/user-profile/"):icon_url[k].rfind("_50")] + "_170" + icon_url[k][-4:]
+                    # print(icon_url[k])
+                    k += 1
+            j = 0
+            for i in range(len(title)):
+                title_name.append(title[i].text)
+                title_page.append(title[i].get_attribute("href"))
+                # print(title_name[j],title_page[j])
                 j += 1
-            else:
-                icon_url.append(picture[i].get_attribute("src"))
-                icon_url[k] = "https://i.pixiv.cat" + icon_url[k][icon_url[k].find("/user-profile/"):icon_url[k].rfind("_50")] + "_170" + icon_url[k][-4:]
-                # print(icon_url[k])
-                k += 1
-        j = 0
-        for i in range(len(title)):
-            title_name.append(title[i].text)
-            title_page.append(title[i].get_attribute("href"))
-            # print(title_name[j],title_page[j])
-            j += 1
-        j = 0
-        for i in range(len(artist)):
-            artist_name.append(artist[i].text)
-            artist_page.append(artist[i].get_attribute("href"))
-            # print(artist_name[j],artist_page[j])
-            j += 1
-        print(len(picture_url),len(icon_url),len(title_name))
-        print(len(pixiv["contents"])-1)
-        for i in range(len(pixiv["contents"])-1):
-            pixiv["contents"][i+1]["hero"]["url"] = picture_url[i]
-            pixiv["contents"][i+1]["hero"]["action"]["uri"] = picture_url[i]
-            pixiv["contents"][i+1]["body"]["contents"][0]["text"] = title_name[i]
-            pixiv["contents"][i+1]["body"]["contents"][0]["action"]["uri"] = title_page[i]
-            pixiv["contents"][i+1]["footer"]["contents"][0]["contents"][0]["url"] = icon_url[i]
-            pixiv["contents"][i+1]["footer"]["contents"][0]["contents"][0]["action"]["uri"] = artist_page[i]
-            pixiv["contents"][i+1]["footer"]["contents"][1]["contents"][0]["text"] = artist_name[i]
+            j = 0
+            for i in range(len(artist)):
+                artist_name.append(artist[i].text)
+                artist_page.append(artist[i].get_attribute("href"))
+                # print(artist_name[j],artist_page[j])
+                j += 1
+            print(len(picture_url),len(icon_url),len(title_name))
+            print(len(pixiv["contents"])-1)
+            for i in range(len(pixiv["contents"])-1):
+                pixiv["contents"][i+1]["hero"]["url"] = picture_url[i]
+                pixiv["contents"][i+1]["hero"]["action"]["uri"] = picture_url[i]
+                pixiv["contents"][i+1]["body"]["contents"][0]["text"] = title_name[i]
+                pixiv["contents"][i+1]["body"]["contents"][0]["action"]["uri"] = title_page[i]
+                pixiv["contents"][i+1]["footer"]["contents"][0]["contents"][0]["url"] = icon_url[i]
+                pixiv["contents"][i+1]["footer"]["contents"][0]["contents"][0]["action"]["uri"] = artist_page[i]
+                pixiv["contents"][i+1]["footer"]["contents"][1]["contents"][0]["text"] = artist_name[i]
 
-
-
-        send_flex_message(reply_token, f"pixiv", pixiv)    
+            send_flex_message(reply_token, f"pixiv", pixiv)
+            self.in_pixiv = True    
         
     def is_going_to_find_pixiv_id(self, event):
         text = event.message.text
@@ -108,10 +110,6 @@ class TocMachine(GraphMachine):
             send_text_message(reply_token,"此id不存在")
             return
         self.driver.get(url)
-        # error = self.driver.find_element_by_class_name("error-title")
-        # if(len(error) != 0):
-        #     send_text_message(reply_token,"此id不存在")
-        #     return
         if(self.stay): #找作者
             tmp = self.driver.find_element_by_class_name("_2AOtfl9")
             twitter_url = tmp.find_element_by_tag_name("a").get_attribute("href")
@@ -150,6 +148,7 @@ class TocMachine(GraphMachine):
             find_artwork_id["footer"]["contents"][1]["contents"][0]["text"] = artist_name
             
             send_flex_message(reply_token, f"find_artwork_id", find_artwork_id)
+            self.back_pixiv()
 
 
 
