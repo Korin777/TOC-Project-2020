@@ -23,7 +23,7 @@ chrome_options.add_argument("--disable-dev-shm-usage")
 chrome_options.add_argument("--no-sandbox")
 driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 print(driver.get_window_size())
-browser.set_window_size(1024, 768) 
+driver.set_window_size(1024, 768) 
 url = 'https://accounts.pixiv.net/login?return_to=https%3A%2'+"F%"+"2Fwww.pixiv.net"+"%"+'2F&lang=zh_tw&source=pc&view_type=page'
 # driver = webdriver.Chrome('./chromedriver', chrome_options=options)
 driver.get(url)
