@@ -113,6 +113,7 @@ class TocMachine(GraphMachine):
             send_text_message(reply_token,"此id不存在")
             return
         self.driver.get(url)
+        time.sleep(3)
         if(self.stay): #找作者
             tmp = self.driver.find_element_by_class_name("_2AOtfl9")
             twitter_url = tmp.find_element_by_tag_name("a").get_attribute("href")
