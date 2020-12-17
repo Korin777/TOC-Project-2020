@@ -51,32 +51,32 @@ class TocMachine(GraphMachine):
             if(picture[i].get_attribute("class") == "rp5asc-10 leQnFG"):
                 picture_url.append(picture[i].get_attribute("src"))
                 picture_url[j] = "https://i.pixiv.cat/img-master" + picture_url[j][picture_url[j].find("/img/"):picture_url[j].rfind("_p0_")] + "_p0_master1200" + picture_url[j][-4:]
-                print(picture_url[j])
+                # print(picture_url[j])
                 j += 1
             else:
                 icon_url.append(picture[i].get_attribute("src"))
                 icon_url[k] = "https://i.pixiv.cat" + icon_url[k][icon_url[k].find("/user-profile/"):icon_url[k].rfind("_50")] + "_170" + icon_url[k][-4:]
-                print(icon_url[k])
+                # print(icon_url[k])
                 k += 1
         j = 0
         for i in range(len(title)):
             title_name.append(title[i].text)
             title_page.append(title[i].get_attribute("href"))
-            print(title_name[j],title_page[j])
+            # print(title_name[j],title_page[j])
             j += 1
         j = 0
         for i in range(len(artist)):
             artist_name.append(artist[i].text)
             artist_page.append(artist[i].get_attribute("href"))
-            print(artist_name[j],artist_page[j])
+            # print(artist_name[j],artist_page[j])
             j += 1
-        for i in range(len(pixiv["contents"])-1):
-            pixiv["contents"][i+1]["hero"]["contents"][0]["url"] = picture_url[i+1]
-            pixiv["contents"][i+1]["body"]["contents"][0]["text"] = title_name[i+1]
-            pixiv["contents"][i+1]["body"]["contents"][0]["action"]["uri"] = title_page[i+1]
-            pixiv["contents"][i+1]["footer"]["contents"][0]["contents"][0]["url"] = icon_url[i+1]
-            pixiv["contents"][i+1]["footer"]["contents"][0]["contents"][0]["action"]["uri"] = artist_page[i+1]
-            pixiv["contents"][i+1]["footer"]["contents"][1]["contents"][0]["text"] = artist_name[i+1]
+        # for i in range(len(pixiv["contents"])-1):
+        #     pixiv["contents"][i+1]["hero"]["contents"][0]["url"] = picture_url[i+1]
+        #     pixiv["contents"][i+1]["body"]["contents"][0]["text"] = title_name[i+1]
+        #     pixiv["contents"][i+1]["body"]["contents"][0]["action"]["uri"] = title_page[i+1]
+        #     pixiv["contents"][i+1]["footer"]["contents"][0]["contents"][0]["url"] = icon_url[i+1]
+        #     pixiv["contents"][i+1]["footer"]["contents"][0]["contents"][0]["action"]["uri"] = artist_page[i+1]
+        #     pixiv["contents"][i+1]["footer"]["contents"][1]["contents"][0]["text"] = artist_name[i+1]
 
 
 
