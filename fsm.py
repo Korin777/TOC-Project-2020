@@ -2,9 +2,12 @@ from transitions.extensions import GraphMachine
 
 from utils import send_text_message, send_flex_message
 
-from content import menu,pixiv,find_pixiv_id
+from content import menu,pixiv,find_artwork_id, find_user_id
 
-# import scraw
+import re
+import urllib.request
+
+
 
 import time
 
@@ -13,6 +16,7 @@ class TocMachine(GraphMachine):
     def __init__(self, driver,**machine_configs):
         self.machine = GraphMachine(model=self, **machine_configs)
         self.driver = driver
+        self.stay = false
         print(driver)
         print(self.driver)
 
@@ -34,7 +38,7 @@ class TocMachine(GraphMachine):
         self.driver.refresh()
         reply_token = event.reply_token
         # send_text_message(reply_token, "請稍後...")
-        time.sleep(3)
+        time.sleep(5)
 
         container = self.driver.find_element_by_class_name("gtm-toppage-thumbnail-illustration-recommend-works-zone")
         picture = container.find_elements_by_tag_name("img")
@@ -88,24 +92,68 @@ class TocMachine(GraphMachine):
         
     def is_going_to_find_pixiv_id(self, event):
         text = event.message.text
-        return text.lower() == "find_pixiv_id"
+        user_pattern = r"(user )+[0-9]*"
+        artwork_pattern = r"(artwork )+[0-9]*"
+        if((re.fullmatch(user_pattern,text.lower())) != None):
+            self.stay = True
+        return ((re.fullmatch(user_pattern,text.lower())) != None) or ((re.fullmatch(artwork_pattern,text.lower())) != None)
     
     def on_enter_find_pixiv_id(self, event):
         print("I'm entering find_pixiv_id")
+        url = "https://www.pixiv.net/" + event.text.replace(" ","/")
         reply_token = event.reply_token
-        send_flex_message(reply_token, f"find_pixiv_id", find_pixiv_id)
+        if(not IsConnection(url)):
+            send_text_message(reply_token,"此id不存在")
+            return
+        self.driver.get(url)
+        if(self.stay): #找作者
+            tmp = self.driver.find_element_by_class_name("_2AOtfl9")
+            twitter_url = tmp.find_element_by_tag_name("a").get_attribute("href")
+            twitter_url = "https://twitter.com/" + twitter_url[twitter_url.find(".com%2" + "F")+7:]
+            tmp = self.driver.find_element_by_class_name("sc-1asno00-0.ihWmWP")
+            artist_name = tmp.get_attribute("title")
+            icon_url = tmp.find_element_by_tag_name("img").get_attribute("src")
+            icon_url = "https://i.pixiv.cat" + icon_url[icon_url.find("/user-profile/"):]
+            picture_url = self.driver.find_element_by_class_name("rp5asc-10.kJsXQy").get_attribute("src")
+            picture_url = "https://i.pixiv.cat/img-master" + picture_url[picture_url.find("/img/"):picture_url.rfind("_p0_")] + "_p0_master1200" + picture_url[-4:]
+
+            find_user_id["header"]["contents"][0]["url"] = picture_url
+            find_user_id["header"]["contents"][1]["contents"][0]["url"] = icon_url
+            find_user_id["body"]["contents"][0]["text"] = artist_name
+            find_user_id["footer"]["contents"][0]["contents"][0]["action"]["uri"] = url
+            find_user_id["footer"]["contents"][1]["contents"][0]["action"]["uri"] = twitter_url
+
+            send_flex_message(reply_token, f"find_pixiv_id", find_user_id)
+        else: #找作品
+            picture_url = self.driver.find_element_by_class_name("sc-1qpw8k9-1.fvHoJ").get_attribute("src")
+            picture_url = "https://i.pixiv.cat/img-master" + picture_url[picture_url.find("/img/"):picture_url.rfind("_p0_")] + "_p0_master1200" + picture_url[-4:]
+            tmp = self.driver.find_element_by_class_name("f30yhg-2.iKmMAb")
+            artist_name = tmp.find_element_by_tag_name("div").get_attribute("title")
+            icon_url = tmp.find_element_by_tag_name("img").get_attribute("src")
+            icon_url = "https://i.pixiv.cat" + icon_url[icon_url.find("/user-profile/"):icon_url.rfind("_50")] + "_170" + icon_url[-4:]
+            artist_page = tmp.find_element_by_tag_name("a").get_attribute("href")
+            title_page = url
+            title_name = self.driver.find_element_by_class_name("sc-1u8nu73-3.feoVvS").text
+            
+            find_artwork_id["hero"]["url"] = picture_url
+            find_artwork_id["hero"]["action"]["uri"] = picture_url
+            find_artwork_id["body"]["contents"][0]["text"] = title_name
+            find_artwork_id["body"]["contents"][0]["action"]["uri"] = title_page
+            find_artwork_id["footer"]["contents"][0]["contents"][0]["url"] = icon_url
+            find_artwork_id["footer"]["contents"][0]["contents"][0]["action"]["uri"] = artist_page
+            find_artwork_id["footer"]["contents"][1]["contents"][0]["text"] = artist_name
+            
+            send_flex_message(reply_token, f"find_artwork_id", find_artwork_id)
 
 
-    def is_going_to_state2(self, event):
-        text = event.message.text
-        return text.lower() == "go to state2"
 
-    def on_enter_state2(self, event):
-        print("I'm entering state2")
 
-        reply_token = event.reply_token
-        send_text_message(reply_token, "Trigger state2")
-        self.go_back()
-
-    def on_exit_state2(self):
-        print("Leaving state2")
+def IsConnection(url):
+    """
+        檢查連線是否失敗。
+    """
+    try:
+        urllib.request.urlopen(url)
+    except urllib.request.HTTPError as e:
+        return False
+    return True
