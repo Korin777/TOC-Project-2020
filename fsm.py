@@ -92,8 +92,8 @@ class TocMachine(GraphMachine):
         
     def is_going_to_find_pixiv_id(self, event):
         text = event.message.text
-        user_pattern = r"(user )+[0-9]*"
-        artwork_pattern = r"(artwork )+[0-9]*"
+        user_pattern = r"(users )+[0-9]*"
+        artwork_pattern = r"(artworks )+[0-9]*"
         if((re.fullmatch(user_pattern,text.lower())) != None):
             self.stay = True
         return ((re.fullmatch(user_pattern,text.lower())) != None) or ((re.fullmatch(artwork_pattern,text.lower())) != None)
