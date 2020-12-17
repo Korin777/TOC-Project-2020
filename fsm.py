@@ -33,7 +33,7 @@ class TocMachine(GraphMachine):
         print("I'm entering pixiv")
         self.driver.refresh()
         reply_token = event.reply_token
-        send_text_message(reply_token, "請稍後...")
+        # send_text_message(reply_token, "請稍後...")
         time.sleep(3)
         container = self.driver.find_element_by_class_name("gtm-toppage-thumbnail-illustration-recommend-works-zone")
         picture = container.find_elements_by_tag_name("img")
