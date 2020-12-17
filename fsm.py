@@ -4,6 +4,8 @@ from utils import send_text_message, send_flex_message, send_push_message
 
 from content import menu,pixiv,find_artwork_id, find_user_id
 
+from linebot.models import MessageEvent, TextMessage, TextSendMessage
+
 import re
 import urllib.request
 
@@ -41,7 +43,7 @@ class TocMachine(GraphMachine):
         if(not self.in_pixiv):
             self.driver.get("https://www.pixiv.net/")
             reply_token = event.reply_token
-           send_push_message(user_id, TextSendMessage(text='請稍後回應...'))
+            send_push_message(user_id, TextSendMessage(text='請稍後回應...'))
             time.sleep(5)
 
             container = self.driver.find_element_by_class_name("gtm-toppage-thumbnail-illustration-recommend-works-zone")
