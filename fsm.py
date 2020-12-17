@@ -100,7 +100,7 @@ class TocMachine(GraphMachine):
     
     def on_enter_find_pixiv_id(self, event):
         print("I'm entering find_pixiv_id")
-        url = "https://www.pixiv.net/" + event.text.replace(" ","/")
+        url = "https://www.pixiv.net/" + event.message.text.replace(" ","/")
         reply_token = event.reply_token
         if(not IsConnection(url)):
             send_text_message(reply_token,"此id不存在")
