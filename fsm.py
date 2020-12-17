@@ -33,7 +33,7 @@ class TocMachine(GraphMachine):
         print("I'm entering pixiv")
         self.driver.refresh()
         reply_token = event.reply_token
-        # send_text_message(reply_token, "正在進入Pixiv請稍後...")
+        send_text_message(reply_token, "請稍後...")
         time.sleep(3)
         container = self.driver.find_element_by_class_name("gtm-toppage-thumbnail-illustration-recommend-works-zone")
         picture = container.find_elements_by_tag_name("img")
@@ -70,13 +70,13 @@ class TocMachine(GraphMachine):
             artist_page.append(artist[i].get_attribute("href"))
             # print(artist_name[j],artist_page[j])
             j += 1
-        # for i in range(len(pixiv["contents"])-1):
-        #     pixiv["contents"][i+1]["hero"]["contents"][0]["url"] = picture_url[i+1]
-        #     pixiv["contents"][i+1]["body"]["contents"][0]["text"] = title_name[i+1]
-        #     pixiv["contents"][i+1]["body"]["contents"][0]["action"]["uri"] = title_page[i+1]
-        #     pixiv["contents"][i+1]["footer"]["contents"][0]["contents"][0]["url"] = icon_url[i+1]
-        #     pixiv["contents"][i+1]["footer"]["contents"][0]["contents"][0]["action"]["uri"] = artist_page[i+1]
-        #     pixiv["contents"][i+1]["footer"]["contents"][1]["contents"][0]["text"] = artist_name[i+1]
+        for i in range(len(pixiv["contents"])-1):
+            pixiv["contents"][i+1]["hero"]["contents"][0]["url"] = picture_url[i+1]
+            pixiv["contents"][i+1]["body"]["contents"][0]["text"] = title_name[i+1]
+            pixiv["contents"][i+1]["body"]["contents"][0]["action"]["uri"] = title_page[i+1]
+            pixiv["contents"][i+1]["footer"]["contents"][0]["contents"][0]["url"] = icon_url[i+1]
+            pixiv["contents"][i+1]["footer"]["contents"][0]["contents"][0]["action"]["uri"] = artist_page[i+1]
+            pixiv["contents"][i+1]["footer"]["contents"][1]["contents"][0]["text"] = artist_name[i+1]
 
 
 
