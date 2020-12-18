@@ -1,7 +1,7 @@
 import os
 import sys
 
-from flask import Flask, jsonify, request, abort, send_file
+from flask import Flask, jsonify, request, abort, send_file, make_response
 from dotenv import load_dotenv
 from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError
@@ -74,6 +74,18 @@ parser = WebhookParser(channel_secret)
 # @app.route("/")
 # def home():
 #     return "hello flask"
+
+
+@app.route('/', methods=['GET'])
+def display_img(filename):
+    if request.method == 'GET':
+        image_data = open("fsm.png", "rb").read()
+        response = make_response(image_data)
+        response.headers['Content-Type'] = 'image/jpg'
+        return response
+    else:
+        pass
+
 
 
 @app.route("/callback", methods=["POST"])
