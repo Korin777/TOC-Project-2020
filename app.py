@@ -15,6 +15,7 @@ import requests
 from fsm import TocMachine
 from utils import send_text_message
 
+print(os.getcwd())
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
@@ -52,11 +53,12 @@ machine = TocMachine(driver = driver,
     show_conditions=True,
 )
 
+machine.get_graph().draw("fsm.png", prog="dot", format="png")
+
 app = Flask(__name__, static_url_path="")
 
 # os.environ['LINE_CHANNEL_SECRET'] = 'b98212fb58db63b10770e6ab8abf47d7'
 # os.environ['LINE_CHANNEL_ACCESS_TOKEN'] = 'VzJCjfnMQl2ILx68AdawvJEWf9f8LIH9w3Ue3wdkJHkoOBP8U4DCMrtLaQN7d2JtORLTTCW0vU5cOiXNtVEbF03/Qg6nIAXphWI8D1PWMUa7tXzx9XFnWXNV3pfhDrFiXRyqLv6L82qQXOhdGgOfHwdB04t89/1O/w1cDnyilFU='
-
 
 # get channel_secret and channel_access_token from your environment variable
 channel_secret = os.getenv("LINE_CHANNEL_SECRET", None)
