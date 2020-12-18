@@ -33,6 +33,9 @@ class TocMachine(GraphMachine):
         reply_token = event.reply_token
         send_flex_message(reply_token, f"menu", menu)
 
+    def on_exit_menu(self,event):
+        self.last_state = self.state
+
     def is_going_to_pixiv(self, event):
         text = event.message.text
         return text.lower() == "pixiv"
@@ -94,7 +97,10 @@ class TocMachine(GraphMachine):
 
             send_flex_message(reply_token, f"pixiv", pixiv)
             self.in_pixiv = True    
-        
+
+    def on_exit_pixiv(self,event):
+        self.last_state = self.state
+
     def is_going_to_find_pixiv_id(self, event):
         text = event.message.text
         user_pattern = r"(users )+[0-9]*"
@@ -153,6 +159,9 @@ class TocMachine(GraphMachine):
             
             send_flex_message(reply_token, f"find_artwork_id", find_artwork_id)
             self.back_pixiv(event)
+
+    def on_exit_find_pixiv_i(self,event):
+        self.last_state = self.state
 
     def is_going_to_instruction(self, event):
         text = event.message.text
