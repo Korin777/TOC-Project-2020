@@ -20,6 +20,7 @@ class TocMachine(GraphMachine):
         self.driver = driver
         self.stay = False
         self.in_pixiv = False
+        self.last_state = "initial"
 
     def is_going_to_menu(self, event):
         text = event.message.text
@@ -35,6 +36,7 @@ class TocMachine(GraphMachine):
 
     def on_exit_menu(self,event):
         self.last_state = self.state
+        print(self.last_state)
 
     def is_going_to_pixiv(self, event):
         text = event.message.text
@@ -180,6 +182,12 @@ class TocMachine(GraphMachine):
         elif(self.last_state == "pixiv"):
             send_push_message(user_id, TextSendMessage(text='menu =>進入選單\nusers id =>找繪師 ex:user 1234\nartworks id =>找作品 ex:artworks 1234'))
             self.ins_back_pix()
+
+    # def is_going_to_find_artist_artwork(self, event):
+
+    # def on_enter_find_artist_artwork(self, event):
+
+    # def on_exit_find_artist_artwork(self, event):
 
 
 
