@@ -4,7 +4,7 @@ from utils import send_text_message, send_flex_message, send_push_message
 
 from content import menu,pixiv,find_artwork_id, find_user_id
 
-from linebot.models import MessageEvent, TextMessage, TextSendMessage
+from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageSendMessage
 
 import re
 import urllib.request
@@ -29,6 +29,8 @@ class TocMachine(GraphMachine):
     
     def on_enter_menu(self, event):
         print("I'm entering menu")
+        user_id = event.source.user_id
+        send_push_message(user_id,ImageSendMessage(original_content_url='https://example.com/original.jpg',preview_image_url='https://example.com/preview.jpg'))
         self.in_pixiv = False
         reply_token = event.reply_token
         send_flex_message(reply_token, f"menu", menu)
