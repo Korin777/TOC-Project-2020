@@ -53,7 +53,7 @@ machine = TocMachine(driver = driver,
     show_conditions=True,
 )
 
-machine.get_graph().draw("fsm.jpg", prog="dot", format="jpg")
+machine.get_graph().draw("fsm.svg", prog="dot", format="svg")
 
 app = Flask(__name__, static_url_path="")
 
