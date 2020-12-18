@@ -156,6 +156,23 @@ class TocMachine(GraphMachine):
             send_flex_message(reply_token, f"find_artwork_id", find_artwork_id)
             self.back_pixiv(event)
 
+    def is_going_to_instruction(self, event):
+        text = event.message.text
+        return text.lower() == "instruction" 
+
+    def on_enter_instuction(self, event):
+        print("I'm entering instuction")
+        user_id = event.source.user_id
+        reply_token = event.reply_token
+        if(self.state == "initial"):
+            send_push_message(user_id, TextSendMessage(text='menu    =>進入選單'))
+            self.ins_back_ini()
+        elif(self.state == "menu"):
+            send_push_message(user_id, TextSendMessage(text='menu =>進入選單\npixiv =>進入pixiv小工具'))
+            self.ins_back_menu()
+        elif(self.state == "pixiv"):
+            send_push_message(user_id, TextSendMessage(text='menu =>進入選單\nusers id =>找繪師 ex:user 1234\nartworks id =>找作品 ex:artworks 1234'))
+            self.ins_back_pix()
 
 
 

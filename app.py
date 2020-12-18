@@ -16,37 +16,41 @@ from fsm import TocMachine
 from utils import send_text_message
 
 
-# chrome_options = webdriver.ChromeOptions()
-# chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-# chrome_options.add_argument("--headless") #無頭模式
-# chrome_options.add_argument("--disable-dev-shm-usage")
-# chrome_options.add_argument("--no-sandbox")
-# driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
-# print(driver.get_window_size())
-# driver.set_window_size(1024, 768) 
-# url = 'https://accounts.pixiv.net/login?return_to=https%3A%2'+"F%"+"2Fwww.pixiv.net"+"%"+'2F&lang=zh_tw&source=pc&view_type=page'
-# # driver = webdriver.Chrome('./chromedriver', chrome_options=options)
-# driver.get(url)
+chrome_options = webdriver.ChromeOptions()
+chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+chrome_options.add_argument("--headless") #無頭模式
+chrome_options.add_argument("--disable-dev-shm-usage")
+chrome_options.add_argument("--no-sandbox")
+driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+print(driver.get_window_size())
+driver.set_window_size(1024, 768) 
+url = 'https://accounts.pixiv.net/login?return_to=https%3A%2'+"F%"+"2Fwww.pixiv.net"+"%"+'2F&lang=zh_tw&source=pc&view_type=page'
+# driver = webdriver.Chrome('./chromedriver', chrome_options=options)
+driver.get(url)
 
-# input = driver.find_element_by_id("LoginComponent").find_elements_by_tag_name("input")
-# input[0].send_keys('k777k777tw123@gmail.com')
-# input[1].send_keys('ko95701ko')
-# input[1].submit()
+input = driver.find_element_by_id("LoginComponent").find_elements_by_tag_name("input")
+input[0].send_keys('k777k777tw123@gmail.com')
+input[1].send_keys('ko95701ko')
+input[1].submit()
 
-driver = 1
 
 load_dotenv()
 
 
 machine = TocMachine(driver = driver,
-    states=["initial", "menu", "pixiv", "find_pixiv_id"],
+    states=["initial", "menu", "pixiv", "find_pixiv_id","instruction"],
     transitions=[
         {"trigger": "advance", "source": "initial", "dest": "menu", "conditions": "is_going_to_menu"},
         {"trigger": "advance", "source": "menu", "dest": "pixiv", "conditions": "is_going_to_pixiv"},
         {"trigger": "advance", "source": "pixiv", "dest": "find_pixiv_id", "conditions": "is_going_to_find_pixiv_id"},
-        {"trigger": "go_back", "source": ["pixiv"], "dest": "initial"},
         {"trigger": "back_pixiv", "source": ["find_pixiv_id"], "dest": "pixiv"},
-        {"trigger": "advance", "source": ["pixiv","find_pixiv_id"], "dest": "menu", "conditions": "is_going_to_menu"}
+        {"trigger": "advance", "source": ["pixiv","find_pixiv_id"], "dest": "menu", "conditions": "is_going_to_menu"},
+        {"trigger": "advance", "source": "*", "dest": "instruction", "conditions": "is_going_to_instruction"},
+        
+        {"trigger": "ins_back_ini", "source": "instruction", "dest": "initial"},
+        {"trigger": "ins_back_menu", "source": "instruction", "dest": "menu"},
+        {"trigger": "ins_back_pix", "source": "instruction", "dest": "pixiv"},
+        {"trigger": "ins_back_find", "source": "instruction", "dest": "find_pixiv_id"}
     ],
     initial="initial",
     auto_transitions=False,
@@ -56,8 +60,6 @@ machine = TocMachine(driver = driver,
 
 app = Flask(__name__, static_url_path="")
 
-# os.environ['LINE_CHANNEL_SECRET'] = 'b98212fb58db63b10770e6ab8abf47d7'
-# os.environ['LINE_CHANNEL_ACCESS_TOKEN'] = 'VzJCjfnMQl2ILx68AdawvJEWf9f8LIH9w3Ue3wdkJHkoOBP8U4DCMrtLaQN7d2JtORLTTCW0vU5cOiXNtVEbF03/Qg6nIAXphWI8D1PWMUa7tXzx9XFnWXNV3pfhDrFiXRyqLv6L82qQXOhdGgOfHwdB04t89/1O/w1cDnyilFU='
 
 # get channel_secret and channel_access_token from your environment variable
 channel_secret = os.getenv("LINE_CHANNEL_SECRET", None)
@@ -71,10 +73,6 @@ if channel_access_token is None:
 
 line_bot_api = LineBotApi(channel_access_token)
 parser = WebhookParser(channel_secret)
-
-# @app.route("/")
-# def home():
-#     return "hello flask"
 
 
 @app.route('/', methods=['GET'])
