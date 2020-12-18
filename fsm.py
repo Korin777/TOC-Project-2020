@@ -20,7 +20,6 @@ class TocMachine(GraphMachine):
         self.driver = driver
         self.stay = False
         self.in_pixiv = False
-        self.last_state = "initial"
 
     def is_going_to_menu(self, event):
         text = event.message.text
@@ -33,6 +32,10 @@ class TocMachine(GraphMachine):
         self.in_pixiv = False
         reply_token = event.reply_token
         send_flex_message(reply_token, f"menu", menu)
+
+    def on_exit(self):
+        self.last_state = self.state
+        print(self.last_state)
 
     def is_going_to_pixiv(self, event):
         text = event.message.text
@@ -157,8 +160,6 @@ class TocMachine(GraphMachine):
 
     def is_going_to_instruction(self, event):
         text = event.message.text
-        self.last_state = self.state
-        print(self.last_state)
         return text.lower() == "instruction" 
 
     def on_enter_instuction(self, event):
@@ -166,7 +167,7 @@ class TocMachine(GraphMachine):
         user_id = event.source.user_id
         reply_token = event.reply_token
         if(self.last_state == "initial"):
-            send_push_message(user_id, TextSendMessage(text='menu    =>進入選單'))
+            send_push_message(user_id, TextSendMessage(text='menu =>進入選單'))
             self.ins_back_ini()
         elif(self.last_state == "menu"):
             send_push_message(user_id, TextSendMessage(text='menu =>進入選單\npixiv =>進入pixiv小工具'))
