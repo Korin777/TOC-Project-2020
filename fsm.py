@@ -33,10 +33,6 @@ class TocMachine(GraphMachine):
         reply_token = event.reply_token
         send_flex_message(reply_token, f"menu", menu)
 
-    def on_exit(self):
-        self.last_state = self.state
-        print(self.last_state)
-
     def is_going_to_pixiv(self, event):
         text = event.message.text
         return text.lower() == "pixiv"
