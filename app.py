@@ -15,7 +15,6 @@ import requests
 from fsm import TocMachine
 from utils import send_text_message
 
-print(os.getcwd())
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
@@ -53,7 +52,6 @@ machine = TocMachine(driver = driver,
     show_conditions=True,
 )
 
-machine.get_graph().draw("fsm.svg", prog="dot", format="svg")
 
 app = Flask(__name__, static_url_path="")
 
