@@ -16,23 +16,24 @@ from fsm import TocMachine
 from utils import send_text_message
 
 
-chrome_options = webdriver.ChromeOptions()
-chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-chrome_options.add_argument("--headless") #無頭模式
-chrome_options.add_argument("--disable-dev-shm-usage")
-chrome_options.add_argument("--no-sandbox")
-driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
-print(driver.get_window_size())
-driver.set_window_size(1024, 768) 
-url = 'https://accounts.pixiv.net/login?return_to=https%3A%2'+"F%"+"2Fwww.pixiv.net"+"%"+'2F&lang=zh_tw&source=pc&view_type=page'
-# driver = webdriver.Chrome('./chromedriver', chrome_options=options)
-driver.get(url)
+# chrome_options = webdriver.ChromeOptions()
+# chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+# chrome_options.add_argument("--headless") #無頭模式
+# chrome_options.add_argument("--disable-dev-shm-usage")
+# chrome_options.add_argument("--no-sandbox")
+# driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+# print(driver.get_window_size())
+# driver.set_window_size(1024, 768) 
+# url = 'https://accounts.pixiv.net/login?return_to=https%3A%2'+"F%"+"2Fwww.pixiv.net"+"%"+'2F&lang=zh_tw&source=pc&view_type=page'
+# # driver = webdriver.Chrome('./chromedriver', chrome_options=options)
+# driver.get(url)
 
-input = driver.find_element_by_id("LoginComponent").find_elements_by_tag_name("input")
-input[0].send_keys('k777k777tw123@gmail.com')
-input[1].send_keys('ko95701ko')
-input[1].submit()
+# input = driver.find_element_by_id("LoginComponent").find_elements_by_tag_name("input")
+# input[0].send_keys('k777k777tw123@gmail.com')
+# input[1].send_keys('ko95701ko')
+# input[1].submit()
 
+driver = 1
 
 load_dotenv()
 
