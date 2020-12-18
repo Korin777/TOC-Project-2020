@@ -163,12 +163,10 @@ class TocMachine(GraphMachine):
         text = event.message.text
         return text.lower() == "instruction" 
 
-    def on_enter_instuction(self, event):
+    def on_enter_instruction(self, event):
         print("I'm entering instuction")
         user_id = event.source.user_id
         reply_token = event.reply_token
-        print("kokokokokoko")
-        print(self.last_state)
         if(self.last_state == "initial"):
             send_push_message(user_id, TextSendMessage(text='menu =>進入選單'))
             self.ins_back_ini()
