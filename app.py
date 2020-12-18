@@ -77,7 +77,7 @@ parser = WebhookParser(channel_secret)
 
 
 @app.route('/', methods=['GET'])
-def display_img(filename):
+def display_img():
     if request.method == 'GET':
         image_data = open("fsm.png", "rb").read()
         response = make_response(image_data)
