@@ -28,15 +28,12 @@ class TocMachine(GraphMachine):
     
     def on_enter_menu(self, event):
         print("I'm entering menu")
+        self.last_state = self.state
         user_id = event.source.user_id
         send_push_message(user_id,ImageSendMessage(original_content_url='https://testmylinebot777.herokuapp.com/',preview_image_url='https://testmylinebot777.herokuapp.com/'))
         self.in_pixiv = False
         reply_token = event.reply_token
         send_flex_message(reply_token, f"menu", menu)
-
-    def on_exit_menu(self,event):
-        self.last_state = self.state
-        print(self.last_state)
 
     def is_going_to_pixiv(self, event):
         text = event.message.text
@@ -44,6 +41,7 @@ class TocMachine(GraphMachine):
     
     def on_enter_pixiv(self, event):
         print("I'm entering pixiv")
+        self.last_state = self.state
         user_id = event.source.user_id
         if(not self.in_pixiv):
             self.driver.get("https://www.pixiv.net/")
@@ -100,9 +98,6 @@ class TocMachine(GraphMachine):
             send_flex_message(reply_token, f"pixiv", pixiv)
             self.in_pixiv = True    
 
-    def on_exit_pixiv(self,event):
-        self.last_state = self.state
-
     def is_going_to_find_pixiv_id(self, event):
         text = event.message.text
         user_pattern = r"(users )+[0-9]*"
@@ -113,6 +108,7 @@ class TocMachine(GraphMachine):
     
     def on_enter_find_pixiv_id(self, event):
         print("I'm entering find_pixiv_id")
+        self.last_state = self.state
         url = "https://www.pixiv.net/" + event.message.text.lower().replace(" ","/")
         print(url)
         reply_token = event.reply_token
@@ -162,8 +158,6 @@ class TocMachine(GraphMachine):
             send_flex_message(reply_token, f"find_artwork_id", find_artwork_id)
             self.back_pixiv(event)
 
-    def on_exit_find_pixiv_i(self,event):
-        self.last_state = self.state
 
     def is_going_to_instruction(self, event):
         text = event.message.text
