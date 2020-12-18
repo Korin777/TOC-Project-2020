@@ -30,7 +30,7 @@ class TocMachine(GraphMachine):
     def on_enter_menu(self, event):
         print("I'm entering menu")
         user_id = event.source.user_id
-        send_push_message(user_id,ImageSendMessage(original_content_url='https://example.com/original.jpg',preview_image_url='https://example.com/preview.jpg'))
+        send_push_message(user_id,ImageSendMessage(original_content_url='https://testmylinebot777.herokuapp.com/',preview_image_url='https://testmylinebot777.herokuapp.com/'))
         self.in_pixiv = False
         reply_token = event.reply_token
         send_flex_message(reply_token, f"menu", menu)
