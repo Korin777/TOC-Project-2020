@@ -188,6 +188,7 @@ class TocMachine(GraphMachine):
         return ((re.fullmatch(absdate_pattern,text.lower())) != None) or ((re.fullmatch(reldate_pattern,text.lower())) != None) 
 
     def on_enter_find_artist_artwork(self, event):
+        print("I'm entering find_pixiv_id")
         text = event.message.text
         reply_token = event.reply_token
         user_id = event.source.user_id
@@ -218,6 +219,7 @@ class TocMachine(GraphMachine):
             # a = "2013-10-10 23:40:00"
             targettime = localtime - int(text.split(" ")[1])*86400
             picture_url = self.driver.find_elements_by_class_name("img.rp5asc-10.leQnFG")
+            print(localtime,targettime,len(picture_url))
             for i in range(len(picture_url)):
                 picture_url[i] = picture_url[i].get_attribute("src")
                 picture_time = picture_url[i][picture_url[i].find("/img/")+5:picture_url[i].find("/img/")+15]
@@ -229,6 +231,7 @@ class TocMachine(GraphMachine):
                     return 
                 picture_url[i] = "https://i.pixiv.cat/img-master" + picture_url[i][picture_url[i].find("/img/"):picture_url[i].rfind("_p0_")] + "_p0_master1200" + picture_url[i][-4:]
                 send_push_message(user_id,ImageSendMessage(original_content_url=picture_url[i],preview_image_url=picture_url[i]))
+        self.back_id()   
             
         
 

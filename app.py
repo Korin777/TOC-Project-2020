@@ -48,6 +48,7 @@ machine = TocMachine(driver = driver,
         {"trigger": "advance", "source": "find_pixiv_id", "dest": "find_artist_artwork", "conditions": "is_going_to_find_artist_artwork"},
 
         {"trigger": "back_pixiv", "source": ["find_pixiv_id"], "dest": "pixiv"},
+        {"trigger": "back_id", "source": ["find_artist_artwork"], "dest": "find_pixiv_id"},
         {"trigger": "ins_back_ini", "source": "instruction", "dest": "initial"},
         {"trigger": "ins_back_menu", "source": "instruction", "dest": "menu"},
         {"trigger": "ins_back_pix", "source": "instruction", "dest": "pixiv"},
