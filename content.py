@@ -1,4 +1,3 @@
-import re
 menu = {
     "type":"bubble",
     "header": {

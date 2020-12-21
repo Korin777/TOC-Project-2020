@@ -177,11 +177,56 @@ class TocMachine(GraphMachine):
             send_push_message(user_id, TextSendMessage(text='menu =>進入選單\nusers id =>找繪師 ex:user 1234\nartworks id =>找作品 ex:artworks 1234'))
             self.ins_back_pix()
 
-    # def is_going_to_find_artist_artwork(self, event):
+    def is_going_to_find_artist_artwork(self, event):
+        text = event.message.text
 
-    # def on_enter_find_artist_artwork(self, event):
+        absdate_pattern = r"(ad )+[0-9]*+(-)+[0-9]*+(-)+[0-9]*"
+        reldate_pattern = r"(rd )+[0-9]*"
+        return ((re.fullmatch(absdate_pattern,text.lower())) != None) or ((re.fullmatch(reldate_pattern,text.lower())) != None) 
 
-    # def on_exit_find_artist_artwork(self, event):
+    def on_enter_find_artist_artwork(self, event):
+        text = event.message.text
+        reply_token = event.reply_token
+        user_id = event.source.user_id
+
+        absdate_pattern = r"(ad )+[0-9]*+(-)+[0-9]*+(-)+[0-9]*"
+        reldate_pattern = r"(rd )+[0-9]*"
+        if((re.fullmatch(absdate_pattern,text.lower())) != None): # 到某個指定日期
+            localtime = time.time()
+            # a = "2013-10-10 23:40:00"
+            timeArray = time.strptime(text.split(" ")[1]+"00:00:00", "%Y-%m-%d %H:%M:%S")
+            #轉換為時間戳:
+            targettime = int(time.mktime(timeArray))
+            picture_url = self.driver.find_elements_by_class_name("img.rp5asc-10.leQnFG")
+            for i in range(len(picture_url)):
+                picture_url[i] = picture_url[i].get_attribute("src")
+                picture_time = picture_url[i][picture_url[i].find("/img/")+5:picture_url[i].find("/img/")+15]
+                picture_time.replace("/","-")
+                timeArray = time.strptime(picture_time.replace("/","-")+"00:00:00", "%Y-%m-%d %H:%M:%S")
+                picture_time = int(time.mktime(timeArray))
+                if(picture_time<targettime):
+                    send_text_message(reply_token,"search end")
+                    return 
+                picture_url[i] = "https://i.pixiv.cat/img-master" + picture_url[i][picture_url[i].find("/img/"):picture_url[i].rfind("_p0_")] + "_p0_master1200" + picture_url[i][-4:]
+                send_push_message(user_id,ImageSendMessage(original_content_url=picture_url[i],preview_image_url=picture_url[i]))
+        else: #幾天前
+            localtime = time.time()
+            # a = "2013-10-10 23:40:00"
+            targettime = localtime - text.split(" ")[1]
+            picture_url = self.driver.find_elements_by_class_name("img.rp5asc-10.leQnFG")
+            for i in range(len(picture_url)):
+                picture_url[i] = picture_url[i].get_attribute("src")
+                picture_time = picture_url[i][picture_url[i].find("/img/")+5:picture_url[i].find("/img/")+15]
+                picture_time.replace("/","-")
+                timeArray = time.strptime(picture_time.replace("/","-")+"00:00:00", "%Y-%m-%d %H:%M:%S")
+                picture_time = int(time.mktime(timeArray))
+                if(picture_time<targettime):
+                    send_text_message(reply_token,"search end")
+                    return 
+                picture_url[i] = "https://i.pixiv.cat/img-master" + picture_url[i][picture_url[i].find("/img/"):picture_url[i].rfind("_p0_")] + "_p0_master1200" + picture_url[i][-4:]
+                send_push_message(user_id,ImageSendMessage(original_content_url=picture_url[i],preview_image_url=picture_url[i]))
+            
+        
 
 
 
