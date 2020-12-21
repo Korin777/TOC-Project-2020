@@ -199,7 +199,7 @@ class TocMachine(GraphMachine):
         if((re.fullmatch(absdate_pattern,text.lower())) != None): # 到某個指定日期
             localtime = time.time()
             # a = "2013-10-10 23:40:00"
-            timeArray = time.strptime(text.split(" ")[1]+"00:00:00", "%Y-%m-%d %H:%M:%S")
+            timeArray = time.strptime(text.split(" ")[1]+" 00:00:00", "%Y-%m-%d %H:%M:%S")
             #轉換為時間戳:
             targettime = int(time.mktime(timeArray))
             picture_url = self.driver.find_element_by_css_selector("img.rp5asc-10.leQnFG")
@@ -209,7 +209,7 @@ class TocMachine(GraphMachine):
                 picture_time = picture_url[i][picture_url[i].find("/img/")+5:picture_url[i].find("/img/")+15]
                 picture_time.replace("/","-")
                 print(picture_time)
-                timeArray = time.strptime(picture_time.replace("/","-")+"00:00:00", "%Y-%m-%d %H:%M:%S")
+                timeArray = time.strptime(picture_time.replace("/","-")+" 00:00:00", "%Y-%m-%d %H:%M:%S")
                 picture_time = int(time.mktime(timeArray))
                 print(picture_time)
                 if(picture_time<targettime):
@@ -229,7 +229,7 @@ class TocMachine(GraphMachine):
                 picture_time = picture_url[i][picture_url[i].find("/img/")+5:picture_url[i].find("/img/")+15]
                 picture_time.replace("/","-")
                 print(picture_time)
-                timeArray = time.strptime(picture_time.replace("/","-")+"00:00:00", "%Y-%m-%d %H:%M:%S")
+                timeArray = time.strptime(picture_time.replace("/","-")+" 00:00:00", "%Y-%m-%d %H:%M:%S")
                 picture_time = int(time.mktime(timeArray))
                 print(picture_time)
                 if(picture_time<targettime):
