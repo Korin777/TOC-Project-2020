@@ -202,13 +202,16 @@ class TocMachine(GraphMachine):
             timeArray = time.strptime(text.split(" ")[1]+"00:00:00", "%Y-%m-%d %H:%M:%S")
             #轉換為時間戳:
             targettime = int(time.mktime(timeArray))
-            picture_url = self.driver.find_elements_by_class_name("img.rp5asc-10.leQnFG")
+            picture_url = self.driver.find_element_by_css_selector("img.rp5asc-10.leQnFG")
+            print(localtime,targettime,len(picture_url))
             for i in range(len(picture_url)):
                 picture_url[i] = picture_url[i].get_attribute("src")
                 picture_time = picture_url[i][picture_url[i].find("/img/")+5:picture_url[i].find("/img/")+15]
                 picture_time.replace("/","-")
+                print(picture_time)
                 timeArray = time.strptime(picture_time.replace("/","-")+"00:00:00", "%Y-%m-%d %H:%M:%S")
                 picture_time = int(time.mktime(timeArray))
+                print(picture_time)
                 if(picture_time<targettime):
                     send_text_message(reply_token,"search end")
                     return 
@@ -218,14 +221,16 @@ class TocMachine(GraphMachine):
             localtime = time.time()
             # a = "2013-10-10 23:40:00"
             targettime = localtime - int(text.split(" ")[1])*86400
-            picture_url = self.driver.find_elements_by_class_name("img.rp5asc-10.leQnFG")
+            picture_url = self.driver.find_element_by_css_selector("img.rp5asc-10.leQnFG")
             print(localtime,targettime,len(picture_url))
             for i in range(len(picture_url)):
                 picture_url[i] = picture_url[i].get_attribute("src")
                 picture_time = picture_url[i][picture_url[i].find("/img/")+5:picture_url[i].find("/img/")+15]
                 picture_time.replace("/","-")
+                print(picture_time)
                 timeArray = time.strptime(picture_time.replace("/","-")+"00:00:00", "%Y-%m-%d %H:%M:%S")
                 picture_time = int(time.mktime(timeArray))
+                print(picture_time)
                 if(picture_time<targettime):
                     send_text_message(reply_token,"search end")
                     return 

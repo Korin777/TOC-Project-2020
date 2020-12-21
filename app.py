@@ -43,7 +43,7 @@ machine = TocMachine(driver = driver,
         {"trigger": "advance", "source": "initial", "dest": "menu", "conditions": "is_going_to_menu"},
         {"trigger": "advance", "source": "menu", "dest": "pixiv", "conditions": "is_going_to_pixiv"},
         {"trigger": "advance", "source": "pixiv", "dest": "find_pixiv_id", "conditions": "is_going_to_find_pixiv_id"},
-        {"trigger": "advance", "source": ["pixiv","find_pixiv_id"], "dest": "menu", "conditions": "is_going_to_menu"},
+        {"trigger": "advance", "source": "*", "dest": "menu", "conditions": "is_going_to_menu"},
         {"trigger": "advance", "source": "*", "dest": "instruction", "conditions": "is_going_to_instruction"},
         {"trigger": "advance", "source": "find_pixiv_id", "dest": "find_artist_artwork", "conditions": "is_going_to_find_artist_artwork"},
 
