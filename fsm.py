@@ -220,7 +220,6 @@ class TocMachine(GraphMachine):
                 send_push_message(user_id,ImageSendMessage(original_content_url=picture_url[i],preview_image_url=picture_url[i]))
         else: #幾天前
             localtime = time.time()
-            # a = "2013-10-10 23:40:00"
             targettime = localtime - int(text.split(" ")[1])*86400
             picture_url = self.driver.find_elements_by_css_selector("img.rp5asc-10.leQnFG")
             print(localtime,targettime,len(picture_url))
@@ -237,7 +236,7 @@ class TocMachine(GraphMachine):
                     self.back_id()  
                     return 
                 picture_url[i] = "https://i.pixiv.cat/img-master" + picture_url[i][picture_url[i].find("/img/"):picture_url[i].rfind("_p0_")] + "_p0_master1200" + picture_url[i][-4:]
-                send_push_message(user_id,ImageSendMessage(original_content_url=picture_url[i],preview_image_url=picture_url[i]))
+                send_push_message(user_id,[ImageSendMessage(original_content_url=picture_url[i],preview_image_url=picture_url[i]),ImageSendMessage(original_content_url=picture_url[i],preview_image_url=picture_url[i])])
         print("0.0")
         self.back_id()   
             
