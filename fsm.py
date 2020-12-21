@@ -180,7 +180,7 @@ class TocMachine(GraphMachine):
     def is_going_to_find_artist_artwork(self, event):
         text = event.message.text
 
-        absdate_pattern = r"(ad )+[0-9]*+(-)+[0-9]*+(-)+[0-9]*"
+        absdate_pattern = r"(ad )+([0-9]*)+(-)+([0-9]*)+(-)+[0-9]*"
         reldate_pattern = r"(rd )+[0-9]*"
         return ((re.fullmatch(absdate_pattern,text.lower())) != None) or ((re.fullmatch(reldate_pattern,text.lower())) != None) 
 
@@ -189,8 +189,8 @@ class TocMachine(GraphMachine):
         reply_token = event.reply_token
         user_id = event.source.user_id
 
-        absdate_pattern = r"(ad )+[0-9]*+(-)+[0-9]*+(-)+[0-9]*"
-        reldate_pattern = r"(rd )+[0-9]*"
+        absdate_pattern = r"(ad )+([0-9]*)+(-)+([0-9]*)+(-)+[0-9]*"
+        # reldate_pattern = r"(rd )+[0-9]*"
         if((re.fullmatch(absdate_pattern,text.lower())) != None): # 到某個指定日期
             localtime = time.time()
             # a = "2013-10-10 23:40:00"

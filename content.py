@@ -656,7 +656,9 @@ find_user_id = {
         "style": "normal"
       }
     ],
-    "alignItems": "center"
+    "alignItems": "center",
+    "position": "relative",
+    "width": "400px"
   },
   "footer": {
     "type": "box",
@@ -699,7 +701,9 @@ find_user_id = {
         "cornerRadius": "10px",
         "margin": "10px"
       }
-    ]
+    ],
+    "position": "relative",
+    "width": "400px"
   }
 }
 
