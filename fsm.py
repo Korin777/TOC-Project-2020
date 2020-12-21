@@ -174,8 +174,11 @@ class TocMachine(GraphMachine):
             send_push_message(user_id, TextSendMessage(text='menu =>進入選單\npixiv =>進入pixiv小工具'))
             self.ins_back_menu()
         elif(self.last_state == "pixiv"):
-            send_push_message(user_id, TextSendMessage(text='menu =>進入選單\nusers id =>找繪師 ex:user 1234\nartworks id =>找作品 ex:artworks 1234'))
+            send_push_message(user_id, TextSendMessage(text='menu =>進入選單\nusers id =>找繪師 ex:users 1234\nartworks id =>找作品 ex:artworks 1234'))
             self.ins_back_pix()
+        elif(self.last_state == "find_pixiv_id"):
+            send_push_message(user_id, TextSendMessage(text='menu =>進入選單\nad 年-月-日 =>找繪師從現在時間到某指定日期間的作品 ex:ad 2020-12-21\nrd 天數 =>找繪師從現在時間到幾天前之間的作品 ex:rd 10'))
+            self.ins_back_find()
 
     def is_going_to_find_artist_artwork(self, event):
         text = event.message.text
@@ -188,6 +191,7 @@ class TocMachine(GraphMachine):
         text = event.message.text
         reply_token = event.reply_token
         user_id = event.source.user_id
+        self.last_state = self.state
 
         absdate_pattern = r"(ad )+([0-9]*)+(-)+([0-9]*)+(-)+[0-9]*"
         # reldate_pattern = r"(rd )+[0-9]*"
@@ -212,7 +216,7 @@ class TocMachine(GraphMachine):
         else: #幾天前
             localtime = time.time()
             # a = "2013-10-10 23:40:00"
-            targettime = localtime - text.split(" ")[1]
+            targettime = localtime - int(text.split(" ")[1])*86400
             picture_url = self.driver.find_elements_by_class_name("img.rp5asc-10.leQnFG")
             for i in range(len(picture_url)):
                 picture_url[i] = picture_url[i].get_attribute("src")
