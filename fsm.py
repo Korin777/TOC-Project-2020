@@ -302,7 +302,7 @@ class TocMachine(GraphMachine):
         for i in range(len(walk_around["contents"])):
             tmp = random.randint(0,correct-1)
             while(tmp in appear_list):
-                tmp = random.randint(0,correct-1)
+                tmp = random.randint(0,self.correct-1)
             appear_list.append(tmp)
             print(tmp)
             print(picture_url[tmp],icon_url[tmp],title_name[tmp])
