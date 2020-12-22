@@ -24,7 +24,7 @@ class TocMachine(GraphMachine):
         self.last_state = "initial"
         self.start = 1
         self.end = 5
-        self.correct = 1
+        self.correct = 0
 
     def is_going_to_menu(self, event):
         text = event.message.text
