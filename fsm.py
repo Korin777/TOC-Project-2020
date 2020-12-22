@@ -294,18 +294,18 @@ class TocMachine(GraphMachine):
         print("fdfdfdfdf")
         appear_list = []
 
-        for i in range(len(walk_around["contents"])):
-            tmp = random.randint(0,correct-1)
-            while(tmp in appear_list):
-                tmp = random.randint(0,correct-1)
-            appear_list.append(tmp)
-            walk_around["contents"][i]["hero"]["url"] = picture_url[tmp]
-            walk_around["contents"][i]["hero"]["action"]["uri"] = picture_url[tmp]
-            walk_around["contents"][i]["body"]["contents"][0]["text"] = title_name[tmp]
-            walk_around["contents"][i]["body"]["contents"][0]["action"]["uri"] = title_page[tmp]
-            walk_around["contents"][i]["footer"]["contents"][0]["contents"][0]["url"] = icon_url[tmp]
-            walk_around["contents"][i]["footer"]["contents"][0]["contents"][0]["action"]["uri"] = artist_page[tmp]
-            walk_around["contents"][i]["footer"]["contents"][1]["contents"][0]["text"] = artist_name[tmp]
+        # for i in range(len(walk_around["contents"])):
+        #     tmp = random.randint(0,correct-1)
+        #     while(tmp in appear_list):
+        #         tmp = random.randint(0,correct-1)
+        #     appear_list.append(tmp)
+        #     walk_around["contents"][i]["hero"]["url"] = picture_url[tmp]
+        #     walk_around["contents"][i]["hero"]["action"]["uri"] = picture_url[tmp]
+        #     walk_around["contents"][i]["body"]["contents"][0]["text"] = title_name[tmp]
+        #     walk_around["contents"][i]["body"]["contents"][0]["action"]["uri"] = title_page[tmp]
+        #     walk_around["contents"][i]["footer"]["contents"][0]["contents"][0]["url"] = icon_url[tmp]
+        #     walk_around["contents"][i]["footer"]["contents"][0]["contents"][0]["action"]["uri"] = artist_page[tmp]
+        #     walk_around["contents"][i]["footer"]["contents"][1]["contents"][0]["text"] = artist_name[tmp]
 
         send_flex_message(reply_token, f"walk_around", walk_around)
 
