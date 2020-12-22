@@ -254,7 +254,7 @@ class TocMachine(GraphMachine):
 
         reply_token = event.reply_token
         send_push_message(user_id, TextSendMessage(text='請稍後回應...'))
-        time.sleep(3)
+        time.sleep(4)
 
         for x in range(self.start, self.end):
             self.driver2.execute_script("window.scrollTo(0,"+str(1000*x)+")")
@@ -300,7 +300,7 @@ class TocMachine(GraphMachine):
         appear_list = []
 
         for i in range(len(walk_around["contents"])):
-            tmp = random.randint(0,correct-1)
+            tmp = random.randint(0,self.correct-1)
             while(tmp in appear_list):
                 tmp = random.randint(0,self.correct-1)
             appear_list.append(tmp)
