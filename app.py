@@ -28,14 +28,14 @@ url = 'https://accounts.pixiv.net/login?return_to=https%3A%2'+"F%"+"2Fwww.pixiv.
 # driver = webdriver.Chrome('./chromedriver', chrome_options=options)
 driver.get(url)
 
-driver2 = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
-# print(driver.get_window_size())
-driver2.set_window_size(1024, 768)
-
 input = driver.find_element_by_id("LoginComponent").find_elements_by_tag_name("input")
 input[0].send_keys('k777k777tw123@gmail.com')
 input[1].send_keys('ko95701ko')
 input[1].submit()
+
+driver2 = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+# print(driver.get_window_size())
+driver2.set_window_size(1024, 768)
 
 
 load_dotenv()
