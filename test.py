@@ -16,18 +16,19 @@ print(re.fullmatch(absdate_pattern,a))
 
 c = "012"
 
-text = "wa"
-
-print(int(text.split(" ")[1]))
-
 # #載入requests套件
-# import requests
-# #需要載入os套件，可處理文件和目錄
-# import os
-# #創建目錄
-# os.makedirs('./img/',exist_ok=True)
-# url='圖片網址'
-# r=requests.get("https://i.pixiv.cat/img-master/img/2020/12/13/15/32/26/86274118_p0_master1200.jpg")
-# with open('./img/圖片名稱','wb') as f:
-# #將圖片下載下來
-#     f.write(r.content)
+import requests
+#需要載入os套件，可處理文件和目錄
+import os
+#創建目錄
+os.makedirs('./img/',exist_ok=True)
+url='圖片網址'
+r=requests.get("https://i.pixiv.cat/img-master/img/2020/12/13/15/32/26/86274118_p0_master1200.jpg")
+with open('./img/圖片名稱','wb') as f:
+#將圖片下載下來
+    f.write(r.content)
+
+import zipfile
+with zipfile.ZipFile('archive.zip', 'w') as zf:
+    zf.write('file1.txt')
+    zf.write('file2.png')

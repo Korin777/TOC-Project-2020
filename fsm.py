@@ -4,7 +4,7 @@ from utils import send_text_message, send_flex_message, send_push_message
 
 from content import menu,pixiv,find_artwork_id, find_user_id,walk_around
 
-from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageSendMessage
+from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageSendMessage, FlexSendMessage
 
 import re
 import urllib.request
@@ -286,6 +286,7 @@ class TocMachine(GraphMachine):
             self.artist_name = []
             self.artist_page = []
             self.correct = 0
+            print(len(self.picture_url),len(self.icon_url))
             for i in range(len(self.picture_url)):
                 self.picture_url[i] = self.picture_url[i].get_attribute("src")
                 # print(i,picture_url[i])
@@ -308,7 +309,7 @@ class TocMachine(GraphMachine):
                 self.artist_page.append(self.container[i].get_attribute("href"))
                 # print(artist_name[i],artist_page[i])
             print(self.correct)
-            self.appear_list
+            self.appear_list = []
             self.re_scraw = False
             self.driver.get("https://www.pixiv.net/ranking.php")
 
@@ -329,7 +330,8 @@ class TocMachine(GraphMachine):
             walk_around["contents"][i]["footer"]["contents"][0]["contents"][0]["action"]["uri"] = self.artist_page[tmp]
             walk_around["contents"][i]["footer"]["contents"][1]["contents"][0]["text"] = self.artist_name[tmp]
 
-        send_flex_message(reply_token, f"walk_around", walk_around)
+        # send_flex_message(reply_token, f"walk_around", walk_around)
+        send_push_message(user_id,FlexSendMessage(alt_text='error',contents=walk_around))
         self.back_pixiv()
 
 
