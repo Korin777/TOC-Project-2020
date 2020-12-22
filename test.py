@@ -29,6 +29,6 @@ with open('./img/圖片名稱','wb') as f:
     f.write(r.content)
 
 import zipfile
-with zipfile.ZipFile('archive.zip', 'w') as zf:
-    zf.write('file1.txt')
-    zf.write('file2.png')
+with zipfile.ZipFile('./img/archive.zip', 'w') as zf:
+    zf.write('./img/1.jpg')
+    zf.write('./img/2.jpg')

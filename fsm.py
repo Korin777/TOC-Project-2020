@@ -276,7 +276,7 @@ class TocMachine(GraphMachine):
                 end = 10
             for x in range(1, end):
                 self.driver.execute_script("window.scrollTo(0,"+str(1000*x)+")")
-                time.sleep(0.25)
+                time.sleep(0.5)
             time.sleep(1)
             self.picture_url = self.driver.find_elements_by_class_name("_thumbnail.ui-scroll-view")
             self.icon_url = []
