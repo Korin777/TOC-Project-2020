@@ -15,7 +15,7 @@ import time
 
 
 class TocMachine(GraphMachine):
-    def __init__(self, driver,**machine_configs):
+    def __init__(self, driver, driver2,**machine_configs):
         self.machine = GraphMachine(model=self, **machine_configs)
         self.driver = driver
         self.driver2 = driver2
