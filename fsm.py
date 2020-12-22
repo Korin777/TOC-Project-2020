@@ -22,9 +22,15 @@ class TocMachine(GraphMachine):
         self.stay = False
         self.in_pixiv = False
         self.last_state = "initial"
-        self.start = 1
-        self.end = 5
-        self.correct = 0
+        self.picture_url = []
+        self.icon_url = []
+        self.title_name = []
+        self.container = []
+        self.title_page = []
+        self.artist_name = []
+        self.artist_page = []
+        self.re_scraw = True
+
 
     def is_going_to_menu(self, event):
         text = event.message.text
@@ -88,8 +94,8 @@ class TocMachine(GraphMachine):
                 artist_page.append(artist[i].get_attribute("href"))
                 # print(artist_name[j],artist_page[j])
                 j += 1
-            print(len(picture_url),len(icon_url),len(title_name))
-            print(len(pixiv["contents"])-1)
+            # print(len(picture_url),len(icon_url),len(title_name))
+            # print(len(pixiv["contents"])-1)
             for i in range(len(pixiv["contents"])-1):
                 pixiv["contents"][i+1]["hero"]["url"] = picture_url[i]
                 pixiv["contents"][i+1]["hero"]["action"]["uri"] = picture_url[i]
@@ -178,7 +184,7 @@ class TocMachine(GraphMachine):
             send_push_message(user_id, TextSendMessage(text='menu =>進入選單\npixiv =>進入pixiv小工具'))
             self.ins_back_menu()
         elif(self.last_state == "pixiv"):
-            send_push_message(user_id, TextSendMessage(text='menu =>進入選單\nusers id =>找繪師 ex:users 1234\nartworks id =>找作品 ex:artworks 1234'))
+            send_push_message(user_id, TextSendMessage(text='menu =>進入選單\nusers id =>找繪師 ex:users 1234\nartworks id =>找作品 ex:artworks 1234\nwa scraw_depth=>隨便看看，scraw_depth為爬蟲深度 ex:wa 20\nwa => 隨便看看，圖從上一次爬蟲之中隨機挑選出'))
             self.ins_back_pix()
         elif(self.last_state == "find_pixiv_id"):
             send_push_message(user_id, TextSendMessage(text='menu =>進入選單\nad 年-月-日 =>找繪師從現在時間到某指定日期間的作品 ex:ad 2020-12-21\nrd 天數 =>找繪師從現在時間到幾天前之間的作品 ex:rd 10'))
@@ -244,75 +250,79 @@ class TocMachine(GraphMachine):
         
     def is_going_to_walk_around(self,event):
         text = event.message.text
+        pattern = r"(wa )+([0-9]*)"
+        if(re.fullmatch(pattern,text.lower())):
+            self.re_scraw = True
 
-        return text == "wr"
+        return (re.fullmatch(pattern,text.lower()) != None) or (text.lower() == "wa")
 
     def on_enter_walk_around(self,event):
         print("I'm entering work around")
-        self.driver2.get("https://www.pixiv.net/ranking.php")
+
+        text = event.message.text
         user_id = event.source.user_id
-
         reply_token = event.reply_token
-        send_push_message(user_id, TextSendMessage(text='請稍後回應...'))
-        time.sleep(4)
+        if(self.re_scraw):
+            send_push_message(user_id, TextSendMessage(text='請稍後回應...'))
+            time.sleep(4)
+            try:
+                end = int(text.split(" ")[1])
+            except:
+                end = 10
+            if(end < 10):
+                end = 10
+            for x in range(1, end):
+                self.driver2.execute_script("window.scrollTo(0,"+str(1000*x)+")")
+                time.sleep(0.25)
+            time.sleep(1)
+            self.picture_url = self.driver2.find_elements_by_class_name("_thumbnail.ui-scroll-view")
+            self.icon_url = []
+            self.title_name = self.driver2.find_elements_by_css_selector("a.title")
+            self.container = self.driver2.find_elements_by_class_name("user-container.ui-profile-popup")
+            self.title_page = []
+            self.artist_name = []
+            self.artist_page = []
+            for i in range(len(self.picture_url)):
+                self.picture_url[i] = self.picture_url[i].get_attribute("src")
+                # print(i,picture_url[i])
+                if "https:" not in self.picture_url[i]:
+                    correct = i
+                    break
+                self.picture_url[i] = "https://i.pixiv.cat/img-master" + self.picture_url[i][self.picture_url[i].find("/img/"):self.picture_url[i].rfind("_p0_")] + "_p0_master1200" + self.picture_url[i][-4:]
 
-        for x in range(self.start, self.end):
-            self.driver2.execute_script("window.scrollTo(0,"+str(1000*x)+")")
-            time.sleep(0.25)
-        time.sleep(1)
-        self.start += 5
-        self.end += 5
-
-
-        picture_url = self.driver2.find_elements_by_class_name("_thumbnail.ui-scroll-view")
-        icon_url = []
-        title_name = self.driver2.find_elements_by_css_selector("a.title")
-        container = self.driver2.find_elements_by_class_name("user-container.ui-profile-popup")
-        title_page = []
-        artist_name = []
-        artist_page = []
-
-        correct = self.correct
-
-        for i in range(correct,len(picture_url)):
-            picture_url[i] = picture_url[i].get_attribute("src")
-            # print(i,picture_url[i])
-            if "https:" not in picture_url[i]:
-                self.correct = i
-                break
-            picture_url[i] = "https://i.pixiv.cat/img-master" + picture_url[i][picture_url[i].find("/img/"):picture_url[i].rfind("_p0_")] + "_p0_master1200" + picture_url[i][-4:]
-
-        for i in range(correct,self.correct):
-            icon_url.append(container[i].get_attribute("data-profile_img"))
-            # print(icon_url[i])
-            icon_url[i] = "https://i.pixiv.cat" + icon_url[i][icon_url[i].find("/user-profile/"):icon_url[i].rfind("_50")] + "_170" + icon_url[i][-4:]
-            # print(icon_url[i])
-        for i in range(correct,self.correct):
-            title_page.append(title_name[i].get_attribute("href"))
-            title_name[i] = title_name[i].text
-            # print(title_name[i],title_page[i])
-        for i in range(correct,self.correct):
-            artist_name.append(container[i].get_attribute("data-user_name"))
-            artist_page.append(container[i].get_attribute("href"))
-            # print(artist_name[i],artist_page[i])
-
-        print(self.correct)
-        appear_list = []
+            for i in range(correct):
+                self.icon_url.append(self.container[i].get_attribute("data-profile_img"))
+                # print(icon_url[i])
+                self.icon_url[i] = "https://i.pixiv.cat" + self.icon_url[i][self.icon_url[i].find("/user-profile/"):self.icon_url[i].rfind("_50")] + "_170" + self.icon_url[i][-4:]
+                # print(icon_url[i])
+            for i in range(correct):
+                self.title_page.append(self.title_name[i].get_attribute("href"))
+                self.title_name[i] = self.title_name[i].text
+                # print(title_name[i],title_page[i])
+            for i in range(correct):
+                self.artist_name.append(self.container[i].get_attribute("data-user_name"))
+                self.artist_page.append(self.container[i].get_attribute("href"))
+                # print(artist_name[i],artist_page[i])
+            print(correct)
+            appear_list = []
+            self.re_scraw = False
 
         for i in range(len(walk_around["contents"])):
-            tmp = random.randint(0,self.correct-1)
+            tmp = random.randint(0,correct-1)
             while(tmp in appear_list):
-                tmp = random.randint(0,self.correct-1)
+                tmp = random.randint(0,correct-1)
             appear_list.append(tmp)
+            if( (correct-len(appear_list))<10 or (len(appear_list)/correct)>0.75):
+                appear_list = []
             print(tmp)
-            print(picture_url[tmp],icon_url[tmp],title_name[tmp])
-            walk_around["contents"][i]["hero"]["url"] = picture_url[tmp]
-            walk_around["contents"][i]["hero"]["action"]["uri"] = picture_url[tmp]
-            walk_around["contents"][i]["body"]["contents"][0]["text"] = title_name[tmp]
-            walk_around["contents"][i]["body"]["contents"][0]["action"]["uri"] = title_page[tmp]
-            walk_around["contents"][i]["footer"]["contents"][0]["contents"][0]["url"] = icon_url[tmp]
-            walk_around["contents"][i]["footer"]["contents"][0]["contents"][0]["action"]["uri"] = artist_page[tmp]
-            walk_around["contents"][i]["footer"]["contents"][1]["contents"][0]["text"] = artist_name[tmp]
+            print(self.picture_url[tmp],self.icon_url[tmp],self.title_name[tmp])
+            walk_around["contents"][i]["hero"]["url"] = self.picture_url[tmp]
+            walk_around["contents"][i]["hero"]["action"]["uri"] = self.picture_url[tmp]
+            walk_around["contents"][i]["body"]["contents"][0]["text"] = self.title_name[tmp]
+            walk_around["contents"][i]["body"]["contents"][0]["action"]["uri"] = self.title_page[tmp]
+            walk_around["contents"][i]["footer"]["contents"][0]["contents"][0]["url"] = self.icon_url[tmp]
+            walk_around["contents"][i]["footer"]["contents"][0]["contents"][0]["action"]["uri"] = self.artist_page[tmp]
+            walk_around["contents"][i]["footer"]["contents"][1]["contents"][0]["text"] = self.artist_name[tmp]
 
         send_flex_message(reply_token, f"walk_around", walk_around)
         self.back_pixiv()

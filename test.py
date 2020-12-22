@@ -13,3 +13,5 @@ import re
 absdate_pattern = r"(ad )+([0-9]*)+(-)+([0-9]*)+(-)+[0-9]*"
 a = "ad 2020-18-80 0"
 print(re.fullmatch(absdate_pattern,a))
+
+c = "012"
