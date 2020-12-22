@@ -34,16 +34,16 @@ input[0].send_keys('k777k777tw123@gmail.com')
 input[1].send_keys('ko95701ko')
 input[1].submit()
 
-driver2 = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
-# print(driver.get_window_size())
-driver2.set_window_size(1024, 768)
-driver2.get("https://www.pixiv.net/ranking.php")
+# driver2 = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+# # print(driver.get_window_size())
+# driver2.set_window_size(1024, 768)
+# driver2.get("https://www.pixiv.net/ranking.php")
 
 
 load_dotenv()
 
 
-machine = TocMachine(driver = driver,driver2 = driver2,
+machine = TocMachine(driver = driver,#driver2 = driver2,
     states=["initial", "menu", "pixiv", "find_pixiv_id","instruction","find_artist_artwork","walk_around"],
     transitions=[
         {"trigger": "advance", "source": "initial", "dest": "menu", "conditions": "is_going_to_menu"},

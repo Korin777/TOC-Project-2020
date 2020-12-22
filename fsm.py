@@ -15,10 +15,9 @@ import time
 
 
 class TocMachine(GraphMachine):
-    def __init__(self, driver, driver2,**machine_configs):
+    def __init__(self, driver,**machine_configs):
         self.machine = GraphMachine(model=self, **machine_configs)
         self.driver = driver
-        self.driver2 = driver2
         self.stay = False
         self.in_pixiv = False
         self.last_state = "initial"
@@ -31,6 +30,7 @@ class TocMachine(GraphMachine):
         self.artist_page = []
         self.re_scraw = True
         self.correct = 0
+        self.appear_list = []
 
 
     def is_going_to_menu(self, event):
@@ -264,22 +264,24 @@ class TocMachine(GraphMachine):
         user_id = event.source.user_id
         reply_token = event.reply_token
         if(self.re_scraw):
+            self.driver.get("https://www.pixiv.net/ranking.php")
             send_push_message(user_id, TextSendMessage(text='請稍後回應...'))
             time.sleep(4)
             try:
                 end = int(text.split(" ")[1])
             except:
                 end = 10
+                print(end)
             if(end < 10):
                 end = 10
             for x in range(1, end):
-                self.driver2.execute_script("window.scrollTo(0,"+str(1000*x)+")")
+                self.driver.execute_script("window.scrollTo(0,"+str(1000*x)+")")
                 time.sleep(0.25)
             time.sleep(1)
-            self.picture_url = self.driver2.find_elements_by_class_name("_thumbnail.ui-scroll-view")
+            self.picture_url = self.driver.find_elements_by_class_name("_thumbnail.ui-scroll-view")
             self.icon_url = []
-            self.title_name = self.driver2.find_elements_by_css_selector("a.title")
-            self.container = self.driver2.find_elements_by_class_name("user-container.ui-profile-popup")
+            self.title_name = self.driver.find_elements_by_css_selector("a.title")
+            self.container = self.driver.find_elements_by_class_name("user-container.ui-profile-popup")
             self.title_page = []
             self.artist_name = []
             self.artist_page = []
@@ -306,17 +308,17 @@ class TocMachine(GraphMachine):
                 self.artist_page.append(self.container[i].get_attribute("href"))
                 # print(artist_name[i],artist_page[i])
             print(self.correct)
-            appear_list = []
+            self.appear_list
             self.re_scraw = False
-            self.driver2.get("https://www.pixiv.net/ranking.php")
+            self.driver.get("https://www.pixiv.net/ranking.php")
 
         for i in range(len(walk_around["contents"])):
             tmp = random.randint(0,self.correct-1)
-            while(tmp in appear_list):
+            while(tmp in self.appear_list):
                 tmp = random.randint(0,self.correct-1)
-            appear_list.append(tmp)
-            if( (self.correct-len(appear_list))<10 or (len(appear_list)/self.correct)>0.75):
-                appear_list = []
+            self.appear_list.append(tmp)
+            if( (self.correct-len(self.appear_list))<10 or (len(self.appear_list)/self.correct)>0.75):
+                self.appear_list = []
             print(tmp)
             print(self.picture_url[tmp],self.icon_url[tmp],self.title_name[tmp])
             walk_around["contents"][i]["hero"]["url"] = self.picture_url[tmp]
