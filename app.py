@@ -93,17 +93,6 @@ class MyWorker():
     thread.start()
 
   def run(self):
-    signature = request.headers["X-Line-Signature"]
-    # get request body as text
-    body = request.get_data(as_text=True)
-    app.logger.info(f"Request body: {body}")
-
-    # parse webhook body
-    try:
-        events = parser.parse(body, signature)
-    except InvalidSignatureError:
-        abort(400)
-
     # if event is MessageEvent and message is TextMessage, then echo text
     for event in events:
         if not isinstance(event, MessageEvent):
@@ -162,16 +151,16 @@ def callback():
 
 @app.route("/webhook", methods=["POST"])
 def webhook_handler():
-    # signature = request.headers["X-Line-Signature"]
-    # # get request body as text
-    # body = request.get_data(as_text=True)
-    # app.logger.info(f"Request body: {body}")
+    signature = request.headers["X-Line-Signature"]
+    # get request body as text
+    body = request.get_data(as_text=True)
+    app.logger.info(f"Request body: {body}")
 
-    # # parse webhook body
-    # try:
-    #     events = parser.parse(body, signature)
-    # except InvalidSignatureError:
-    #     abort(400)
+    # parse webhook body
+    try:
+        events = parser.parse(body, signature)
+    except InvalidSignatureError:
+        abort(400)
 
     # # if event is MessageEvent and message is TextMessage, then echo text
     # for event in events:
