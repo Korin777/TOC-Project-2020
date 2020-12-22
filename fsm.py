@@ -30,6 +30,7 @@ class TocMachine(GraphMachine):
         self.artist_name = []
         self.artist_page = []
         self.re_scraw = True
+        self.correct = 0
 
 
     def is_going_to_menu(self, event):
@@ -282,37 +283,38 @@ class TocMachine(GraphMachine):
             self.title_page = []
             self.artist_name = []
             self.artist_page = []
+            self.correct = 0
             for i in range(len(self.picture_url)):
                 self.picture_url[i] = self.picture_url[i].get_attribute("src")
                 # print(i,picture_url[i])
                 if "https:" not in self.picture_url[i]:
-                    correct = i
+                    self.correct = i
                     break
                 self.picture_url[i] = "https://i.pixiv.cat/img-master" + self.picture_url[i][self.picture_url[i].find("/img/"):self.picture_url[i].rfind("_p0_")] + "_p0_master1200" + self.picture_url[i][-4:]
 
-            for i in range(correct):
+            for i in range(self.correct):
                 self.icon_url.append(self.container[i].get_attribute("data-profile_img"))
                 # print(icon_url[i])
                 self.icon_url[i] = "https://i.pixiv.cat" + self.icon_url[i][self.icon_url[i].find("/user-profile/"):self.icon_url[i].rfind("_50")] + "_170" + self.icon_url[i][-4:]
                 # print(icon_url[i])
-            for i in range(correct):
+            for i in range(self.correct):
                 self.title_page.append(self.title_name[i].get_attribute("href"))
                 self.title_name[i] = self.title_name[i].text
                 # print(title_name[i],title_page[i])
-            for i in range(correct):
+            for i in range(self.correct):
                 self.artist_name.append(self.container[i].get_attribute("data-user_name"))
                 self.artist_page.append(self.container[i].get_attribute("href"))
                 # print(artist_name[i],artist_page[i])
-            print(correct)
+            print(self.correct)
             appear_list = []
             self.re_scraw = False
 
         for i in range(len(walk_around["contents"])):
-            tmp = random.randint(0,correct-1)
+            tmp = random.randint(0,self.correct-1)
             while(tmp in appear_list):
-                tmp = random.randint(0,correct-1)
+                tmp = random.randint(0,self.correct-1)
             appear_list.append(tmp)
-            if( (correct-len(appear_list))<10 or (len(appear_list)/correct)>0.75):
+            if( (self.correct-len(appear_list))<10 or (len(appear_list)/self.correct)>0.75):
                 appear_list = []
             print(tmp)
             print(self.picture_url[tmp],self.icon_url[tmp],self.title_name[tmp])
