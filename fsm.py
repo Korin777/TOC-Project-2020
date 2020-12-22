@@ -22,6 +22,9 @@ class TocMachine(GraphMachine):
         self.stay = False
         self.in_pixiv = False
         self.last_state = "initial"
+        self.start = 1
+        self.end = 5
+        self.correct = 1
 
     def is_going_to_menu(self, event):
         text = event.message.text
@@ -253,10 +256,12 @@ class TocMachine(GraphMachine):
         send_push_message(user_id, TextSendMessage(text='請稍後回應...'))
         time.sleep(3)
 
-        for x in range(1, 5):
+        for x in range(self.start, self.end):
             self.driver2.execute_script("window.scrollTo(0,"+str(1000*x)+")")
             time.sleep(0.25)
         time.sleep(1)
+        self.start += 5
+        self.end += 5
 
 
         picture_url = self.driver2.find_elements_by_class_name("_thumbnail.ui-scroll-view")
@@ -267,31 +272,31 @@ class TocMachine(GraphMachine):
         artist_name = []
         artist_page = []
 
-        correct = 1
+        correct = self.correct
 
-        for i in range(len(picture_url)):
+        for i in range(correct,len(picture_url)):
             picture_url[i] = picture_url[i].get_attribute("src")
             # print(i,picture_url[i])
             if "https:" not in picture_url[i]:
-                correct = i
+                self.correct = i
                 break
             picture_url[i] = "https://i.pixiv.cat/img-master" + picture_url[i][picture_url[i].find("/img/"):picture_url[i].rfind("_p0_")] + "_p0_master1200" + picture_url[i][-4:]
 
-        for i in range(correct):
+        for i in range(correct,self.correct):
             icon_url.append(container[i].get_attribute("data-profile_img"))
             # print(icon_url[i])
             icon_url[i] = "https://i.pixiv.cat" + icon_url[i][icon_url[i].find("/user-profile/"):icon_url[i].rfind("_50")] + "_170" + icon_url[i][-4:]
             # print(icon_url[i])
-        for i in range(correct):
+        for i in range(correct,self.correct):
             title_page.append(title_name[i].get_attribute("href"))
             title_name[i] = title_name[i].text
             # print(title_name[i],title_page[i])
-        for i in range(correct):
+        for i in range(correct,self.correct):
             artist_name.append(container[i].get_attribute("data-user_name"))
             artist_page.append(container[i].get_attribute("href"))
             # print(artist_name[i],artist_page[i])
 
-        print(correct)
+        print(self.correct)
         appear_list = []
 
         for i in range(len(walk_around["contents"])):
@@ -310,6 +315,7 @@ class TocMachine(GraphMachine):
             walk_around["contents"][i]["footer"]["contents"][1]["contents"][0]["text"] = artist_name[tmp]
 
         send_flex_message(reply_token, f"walk_around", walk_around)
+        self.back_pixiv()
 
 
 
