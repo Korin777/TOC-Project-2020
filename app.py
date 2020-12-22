@@ -1,5 +1,6 @@
 import os
 import sys
+import threading
 
 from flask import Flask, jsonify, request, abort, send_file, make_response
 from dotenv import load_dotenv
@@ -50,7 +51,7 @@ machine = TocMachine(driver = driver,driver2 = driver2,
         {"trigger": "advance", "source": "*", "dest": "menu", "conditions": "is_going_to_menu"},
         {"trigger": "advance", "source": "*", "dest": "instruction", "conditions": "is_going_to_instruction"},
         {"trigger": "advance", "source": "find_pixiv_id", "dest": "find_artist_artwork", "conditions": "is_going_to_find_artist_artwork"},
-        # {"trigger": "advance", "source": "pixiv", "dest": "walk_around", "conditions": "is_going_to_walk_around"},
+        {"trigger": "advance", "source": "pixiv", "dest": "walk_around", "conditions": "is_going_to_walk_around"},
 
 
         {"trigger": "back_pixiv", "source": ["find_pixiv_id","walk_around"], "dest": "pixiv"},
@@ -81,6 +82,43 @@ if channel_access_token is None:
 
 line_bot_api = LineBotApi(channel_access_token)
 parser = WebhookParser(channel_secret)
+
+
+class MyWorker():
+
+  def __init__(self):
+
+    thread = threading.Thread(target=self.run, args=())
+    thread.daemon = True
+    thread.start()
+
+  def run(self):
+    signature = request.headers["X-Line-Signature"]
+    # get request body as text
+    body = request.get_data(as_text=True)
+    app.logger.info(f"Request body: {body}")
+
+    # parse webhook body
+    try:
+        events = parser.parse(body, signature)
+    except InvalidSignatureError:
+        abort(400)
+
+    # if event is MessageEvent and message is TextMessage, then echo text
+    for event in events:
+        if not isinstance(event, MessageEvent):
+            continue
+        if not isinstance(event.message, TextMessage):
+            continue
+        if not isinstance(event.message.text, str):
+            continue
+        print(f"\nFSM STATE: {machine.state}")
+        print(f"REQUEST BODY: \n{body}")
+        response = machine.advance(event)
+        if response == False:
+            send_text_message(event.reply_token, "Not Entering any State")
+
+
 
 
 @app.route('/', methods=['GET'])
@@ -124,30 +162,31 @@ def callback():
 
 @app.route("/webhook", methods=["POST"])
 def webhook_handler():
-    signature = request.headers["X-Line-Signature"]
-    # get request body as text
-    body = request.get_data(as_text=True)
-    app.logger.info(f"Request body: {body}")
+    # signature = request.headers["X-Line-Signature"]
+    # # get request body as text
+    # body = request.get_data(as_text=True)
+    # app.logger.info(f"Request body: {body}")
 
-    # parse webhook body
-    try:
-        events = parser.parse(body, signature)
-    except InvalidSignatureError:
-        abort(400)
+    # # parse webhook body
+    # try:
+    #     events = parser.parse(body, signature)
+    # except InvalidSignatureError:
+    #     abort(400)
 
-    # if event is MessageEvent and message is TextMessage, then echo text
-    for event in events:
-        if not isinstance(event, MessageEvent):
-            continue
-        if not isinstance(event.message, TextMessage):
-            continue
-        if not isinstance(event.message.text, str):
-            continue
-        print(f"\nFSM STATE: {machine.state}")
-        print(f"REQUEST BODY: \n{body}")
-        response = machine.advance(event)
-        if response == False:
-            send_text_message(event.reply_token, "Not Entering any State")
+    # # if event is MessageEvent and message is TextMessage, then echo text
+    # for event in events:
+    #     if not isinstance(event, MessageEvent):
+    #         continue
+    #     if not isinstance(event.message, TextMessage):
+    #         continue
+    #     if not isinstance(event.message.text, str):
+    #         continue
+    #     print(f"\nFSM STATE: {machine.state}")
+    #     print(f"REQUEST BODY: \n{body}")
+    #     response = machine.advance(event)
+    #     if response == False:
+    #         send_text_message(event.reply_token, "Not Entering any State")
+    MyWorker()
 
     return "OK"
 
