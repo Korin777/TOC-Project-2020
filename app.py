@@ -37,6 +37,7 @@ input[1].submit()
 driver2 = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 # print(driver.get_window_size())
 driver2.set_window_size(1024, 768)
+driver2.get("https://www.pixiv.net/ranking.php")
 
 
 load_dotenv()

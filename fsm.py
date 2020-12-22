@@ -308,6 +308,7 @@ class TocMachine(GraphMachine):
             print(self.correct)
             appear_list = []
             self.re_scraw = False
+            self.driver2.get("https://www.pixiv.net/ranking.php")
 
         for i in range(len(walk_around["contents"])):
             tmp = random.randint(0,self.correct-1)
