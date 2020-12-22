@@ -253,7 +253,7 @@ class TocMachine(GraphMachine):
         send_push_message(user_id, TextSendMessage(text='請稍後回應...'))
         time.sleep(5)
 
-        for x in range(1, 10):
+        for x in range(1, 5):
             self.driver2.execute_script("window.scrollTo(0,"+str(1000*x)+")")
             time.sleep(0.25)
         time.sleep(1)
@@ -271,7 +271,7 @@ class TocMachine(GraphMachine):
 
         for i in range(len(picture_url)):
             picture_url[i] = picture_url[i].get_attribute("src")
-            print(i,picture_url[i])
+            # print(i,picture_url[i])
             if "https:" not in picture_url[i]:
                 correct = i
                 break
@@ -281,16 +281,17 @@ class TocMachine(GraphMachine):
             icon_url.append(container[i].get_attribute("data-profile_img"))
             # print(icon_url[i])
             icon_url[i] = "https://i.pixiv.cat" + icon_url[i][icon_url[i].find("/user-profile/"):icon_url[i].rfind("_50")] + "_170" + icon_url[i][-4:]
-            print(icon_url[i])
+            # print(icon_url[i])
         for i in range(correct):
             title_page.append(title_name[i].get_attribute("href"))
             title_name[i] = title_name[i].text
-            print(title_name[i],title_page[i])
+            # print(title_name[i],title_page[i])
         for i in range(correct):
             artist_name.append(container[i].get_attribute("data-user_name"))
             artist_page.append(container[i].get_attribute("href"))
-            print(artist_name[i],artist_page[i])
+            # print(artist_name[i],artist_page[i])
 
+        print("fdfdfdfdf")
         appear_list = []
 
         for i in range(len(walk_around["contents"])):
