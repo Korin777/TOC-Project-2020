@@ -2,13 +2,13 @@ from transitions.extensions import GraphMachine
 
 from utils import send_text_message, send_flex_message, send_push_message
 
-from content import menu,pixiv,find_artwork_id, find_user_id
+from content import menu,pixiv,find_artwork_id, find_user_id,walk_around
 
 from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageSendMessage
 
 import re
 import urllib.request
-
+import random
 
 
 import time
@@ -18,6 +18,7 @@ class TocMachine(GraphMachine):
     def __init__(self, driver,**machine_configs):
         self.machine = GraphMachine(model=self, **machine_configs)
         self.driver = driver
+        self.driver2 = driver2
         self.stay = False
         self.in_pixiv = False
         self.last_state = "initial"
@@ -192,7 +193,6 @@ class TocMachine(GraphMachine):
         text = event.message.text
         reply_token = event.reply_token
         user_id = event.source.user_id
-        self.last_state = self.state
 
         absdate_pattern = r"(ad )+([0-9]*)+(-)+([0-9]*)+(-)+[0-9]*"
         # reldate_pattern = r"(rd )+[0-9]*"
@@ -237,10 +237,76 @@ class TocMachine(GraphMachine):
                     return 
                 picture_url[i] = "https://i.pixiv.cat/img-master" + picture_url[i][picture_url[i].find("/img/"):picture_url[i].rfind("_p0_")] + "_p0_master1200" + picture_url[i][-4:]
                 send_push_message(user_id,[ImageSendMessage(original_content_url=picture_url[i],preview_image_url=picture_url[i]),ImageSendMessage(original_content_url=picture_url[i],preview_image_url=picture_url[i])])
-        print("0.0")
         self.back_id()   
-            
         
+    def is_going_to_walk_around(self,event):
+        text = event.message.text
+
+        return text == "wr"
+
+    def on_enter_walk_around(self,event):
+        print("I'm entering work around")
+        self.driver2.get("https://www.pixiv.net/ranking.php")
+        user_id = event.source.user_id
+
+        reply_token = event.reply_token
+        send_push_message(user_id, TextSendMessage(text='請稍後回應...'))
+        time.sleep(5)
+
+        for x in range(1, 10):
+            self.driver2.execute_script("window.scrollTo(0,"+str(1000*x)+")")
+            time.sleep(0.25)
+        time.sleep(1)
+
+
+        picture_url = self.driver2.find_elements_by_class_name("_thumbnail.ui-scroll-view")
+        icon_url = []
+        title_name = self.driver2.find_elements_by_css_selector("a.title")
+        container = self.driver2.find_elements_by_class_name("user-container.ui-profile-popup")
+        title_page = []
+        artist_name = []
+        artist_page = []
+
+        correct = 1
+
+        for i in range(len(picture_url)):
+            picture_url[i] = picture_url[i].get_attribute("src")
+            print(i,picture_url[i])
+            if "https:" not in picture_url[i]:
+                correct = i
+                break
+            picture_url[i] = "https://i.pixiv.cat/img-master" + picture_url[i][picture_url[i].find("/img/"):picture_url[i].rfind("_p0_")] + "_p0_master1200" + picture_url[i][-4:]
+
+        for i in range(correct):
+            icon_url.append(container[i].get_attribute("data-profile_img"))
+            # print(icon_url[i])
+            icon_url[i] = "https://i.pixiv.cat" + icon_url[i][icon_url[i].find("/user-profile/"):icon_url[i].rfind("_50")] + "_170" + icon_url[i][-4:]
+            print(icon_url[i])
+        for i in range(correct):
+            title_page.append(title_name[i].get_attribute("href"))
+            title_name[i] = title_name[i].text
+            print(title_name[i],title_page[i])
+        for i in range(correct):
+            artist_name.append(container[i].get_attribute("data-user_name"))
+            artist_page.append(container[i].get_attribute("href"))
+            print(artist_name[i],artist_page[i])
+
+        appear_list = []
+
+        for i in range(len(pixiv["contents"])):
+            tmp = random.randint(0,correct-1)
+            while(tmp in appear_list):
+                tmp = random.randint(0,correct-1)
+            appear_list.append(tmp)
+            pixiv["contents"][i]["hero"]["url"] = picture_url[tmp]
+            pixiv["contents"][i]["hero"]["action"]["uri"] = picture_url[tmp]
+            pixiv["contents"][i]["body"]["contents"][0]["text"] = title_name[tmp]
+            pixiv["contents"][i]["body"]["contents"][0]["action"]["uri"] = title_page[tmp]
+            pixiv["contents"][i]["footer"]["contents"][0]["contents"][0]["url"] = icon_url[tmp]
+            pixiv["contents"][i]["footer"]["contents"][0]["contents"][0]["action"]["uri"] = artist_page[tmp]
+            pixiv["contents"][i]["footer"]["contents"][1]["contents"][0]["text"] = artist_name[tmp]
+
+        send_flex_message(reply_token, f"walk_around", walk_around)
 
 
 

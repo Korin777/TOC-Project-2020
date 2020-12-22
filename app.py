@@ -22,11 +22,15 @@ chrome_options.add_argument("--headless") #無頭模式
 chrome_options.add_argument("--disable-dev-shm-usage")
 chrome_options.add_argument("--no-sandbox")
 driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
-print(driver.get_window_size())
+# print(driver.get_window_size())
 driver.set_window_size(1024, 768) 
 url = 'https://accounts.pixiv.net/login?return_to=https%3A%2'+"F%"+"2Fwww.pixiv.net"+"%"+'2F&lang=zh_tw&source=pc&view_type=page'
 # driver = webdriver.Chrome('./chromedriver', chrome_options=options)
 driver.get(url)
+
+driver2 = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+# print(driver.get_window_size())
+driver2.set_window_size(1024, 768)
 
 input = driver.find_element_by_id("LoginComponent").find_elements_by_tag_name("input")
 input[0].send_keys('k777k777tw123@gmail.com')
@@ -37,8 +41,8 @@ input[1].submit()
 load_dotenv()
 
 
-machine = TocMachine(driver = driver,
-    states=["initial", "menu", "pixiv", "find_pixiv_id","instruction","find_artist_artwork"],
+machine = TocMachine(driver = driver,driver2 = driver2
+    states=["initial", "menu", "pixiv", "find_pixiv_id","instruction","find_artist_artwork","walk_around"],
     transitions=[
         {"trigger": "advance", "source": "initial", "dest": "menu", "conditions": "is_going_to_menu"},
         {"trigger": "advance", "source": "menu", "dest": "pixiv", "conditions": "is_going_to_pixiv"},
@@ -46,6 +50,7 @@ machine = TocMachine(driver = driver,
         {"trigger": "advance", "source": "*", "dest": "menu", "conditions": "is_going_to_menu"},
         {"trigger": "advance", "source": "*", "dest": "instruction", "conditions": "is_going_to_instruction"},
         {"trigger": "advance", "source": "find_pixiv_id", "dest": "find_artist_artwork", "conditions": "is_going_to_find_artist_artwork"},
+        {"trigger": "advance", "source": "pixiv", "dest": "walk_around", "conditions": "is_going_to_walk_around"},
 
         {"trigger": "back_pixiv", "source": ["find_pixiv_id"], "dest": "pixiv"},
         {"trigger": "back_id", "source": ["find_artist_artwork"], "dest": "find_pixiv_id"},
