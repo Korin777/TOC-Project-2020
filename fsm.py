@@ -251,7 +251,7 @@ class TocMachine(GraphMachine):
 
         reply_token = event.reply_token
         send_push_message(user_id, TextSendMessage(text='請稍後回應...'))
-        time.sleep(5)
+        time.sleep(3)
 
         for x in range(1, 5):
             self.driver2.execute_script("window.scrollTo(0,"+str(1000*x)+")")
@@ -291,7 +291,7 @@ class TocMachine(GraphMachine):
             artist_page.append(container[i].get_attribute("href"))
             # print(artist_name[i],artist_page[i])
 
-        print("fdfdfdfdf")
+        print(correct)
         appear_list = []
 
         for i in range(len(walk_around["contents"])):
