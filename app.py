@@ -86,26 +86,27 @@ parser = WebhookParser(channel_secret)
 
 class MyWorker():
 
-  def __init__(self):
+    def __init__(self,events,body):
+        self.events = events
+        self.body = body
+        thread = threading.Thread(target=self.run, args=())
+        thread.daemon = True
+        thread.start()
 
-    thread = threading.Thread(target=self.run, args=())
-    thread.daemon = True
-    thread.start()
-
-  def run(self):
-    # if event is MessageEvent and message is TextMessage, then echo text
-    for event in events:
-        if not isinstance(event, MessageEvent):
-            continue
-        if not isinstance(event.message, TextMessage):
-            continue
-        if not isinstance(event.message.text, str):
-            continue
-        print(f"\nFSM STATE: {machine.state}")
-        print(f"REQUEST BODY: \n{body}")
-        response = machine.advance(event)
-        if response == False:
-            send_text_message(event.reply_token, "Not Entering any State")
+    def run(self):
+        # if event is MessageEvent and message is TextMessage, then echo text
+        for event in self.events:
+            if not isinstance(event, MessageEvent):
+                continue
+            if not isinstance(event.message, TextMessage):
+                continue
+            if not isinstance(event.message.text, str):
+                continue
+            print(f"\nFSM STATE: {machine.state}")
+            print(f"REQUEST BODY: \n{self.body}")
+            response = machine.advance(event)
+            if response == False:
+                send_text_message(event.reply_token, "Not Entering any State")
 
 
 
@@ -175,7 +176,7 @@ def webhook_handler():
     #     response = machine.advance(event)
     #     if response == False:
     #         send_text_message(event.reply_token, "Not Entering any State")
-    MyWorker()
+    MyWorker(events,body)
 
     return "OK"
 
