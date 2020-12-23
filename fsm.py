@@ -24,6 +24,7 @@ class TocMachine(GraphMachine):
         self.driver = driver
         self.stay = False
         self.in_pixiv = False
+        self.in_artist = False
         self.last_state = "initial"
         self.picture_url = []
         self.icon_url = []
@@ -48,6 +49,7 @@ class TocMachine(GraphMachine):
         user_id = event.source.user_id
         send_push_message(user_id,ImageSendMessage(original_content_url='https://testmylinebot777.herokuapp.com/',preview_image_url='https://testmylinebot777.herokuapp.com/'))
         self.in_pixiv = False
+        self.in_artist = False
         reply_token = event.reply_token
         send_flex_message(reply_token, f"menu", menu)
 
@@ -125,54 +127,68 @@ class TocMachine(GraphMachine):
     def on_enter_find_pixiv_id(self, event):
         print("I'm entering find_pixiv_id")
         self.last_state = self.state
-        url = "https://www.pixiv.net/" + event.message.text.lower().replace(" ","/")
-        print(url)
-        reply_token = event.reply_token
-        if(not IsConnection(url)):
-            self.back_pixiv()
-            send_text_message(reply_token,"此id不存在")
-            return
-        self.driver.get(url)
-        time.sleep(3)
-        if(self.stay): #找作者
-            tmp = self.driver.find_element_by_class_name("_2AOtfl9")
-            twitter_url = tmp.find_element_by_tag_name("a").get_attribute("href")
-            twitter_url = "https://twitter.com/" + twitter_url[twitter_url.find(".com%2" + "F")+7:]
-            tmp = self.driver.find_element_by_class_name("sc-1asno00-0.ihWmWP")
-            artist_name = tmp.get_attribute("title")
-            icon_url = tmp.find_element_by_tag_name("img").get_attribute("src")
-            icon_url = "https://i.pixiv.cat" + icon_url[icon_url.find("/user-profile/"):]
-            picture_url = self.driver.find_element_by_class_name("rp5asc-10.leQnFG").get_attribute("src")
-            picture_url = "https://i.pixiv.cat/img-master" + picture_url[picture_url.find("/img/"):picture_url.rfind("_p0_")] + "_p0_master1200" + picture_url[-4:]
-
-            find_user_id["header"]["contents"][0]["url"] = picture_url
-            find_user_id["header"]["contents"][1]["contents"][0]["url"] = icon_url
-            find_user_id["body"]["contents"][0]["text"] = artist_name
-            find_user_id["footer"]["contents"][0]["contents"][0]["action"]["uri"] = url
-            find_user_id["footer"]["contents"][1]["contents"][0]["action"]["uri"] = twitter_url
-
-            send_flex_message(reply_token, f"find_pixiv_id", find_user_id)
-        else: #找作品
-            picture_url = self.driver.find_element_by_class_name("sc-1qpw8k9-1.fvHoJ").get_attribute("src")
-            picture_url = "https://i.pixiv.cat/img-master" + picture_url[picture_url.find("/img/"):picture_url.rfind("_p0_")] + "_p0_master1200" + picture_url[-4:]
-            tmp = self.driver.find_element_by_class_name("f30yhg-2.iKmMAb")
-            artist_name = tmp.find_element_by_tag_name("div").get_attribute("title")
-            icon_url = tmp.find_element_by_tag_name("img").get_attribute("src")
-            icon_url = "https://i.pixiv.cat" + icon_url[icon_url.find("/user-profile/"):icon_url.rfind("_50")] + "_170" + icon_url[-4:]
-            artist_page = tmp.find_element_by_tag_name("a").get_attribute("href")
-            title_page = url
-            title_name = self.driver.find_element_by_class_name("sc-1u8nu73-3.feoVvS").text
-            
-            find_artwork_id["hero"]["url"] = picture_url
-            find_artwork_id["hero"]["action"]["uri"] = picture_url
-            find_artwork_id["body"]["contents"][0]["text"] = title_name
-            find_artwork_id["body"]["contents"][0]["action"]["uri"] = title_page
-            find_artwork_id["footer"]["contents"][0]["contents"][0]["url"] = icon_url
-            find_artwork_id["footer"]["contents"][0]["contents"][0]["action"]["uri"] = artist_page
-            find_artwork_id["footer"]["contents"][1]["contents"][0]["text"] = artist_name
-            
-            send_flex_message(reply_token, f"find_artwork_id", find_artwork_id)
-            self.back_pixiv(event)
+        if(not self.in_artist):
+            url = "https://www.pixiv.net/" + event.message.text.lower().replace(" ","/")
+            print(url)
+            reply_token = event.reply_token
+            if(not IsConnection(url)):
+                self.back_pixiv()
+                send_text_message(reply_token,"此id不存在")
+                return
+            self.driver.get(url)
+            time.sleep(3)
+            if(self.stay): #找作者
+                twitter, picture = True, True               
+                tmp = self.driver.find_element_by_class_name("_2AOtfl9")
+                try:
+                    twitter_url = tmp.find_element_by_tag_name("a").get_attribute("href")
+                    twitter_url = "https://twitter.com/" + twitter_url[twitter_url.find(".com%2" + "F")+7:]
+                except:
+                    twitter = False
+                tmp = self.driver.find_element_by_class_name("sc-1asno00-0.ihWmWP")
+                artist_name = tmp.get_attribute("title")
+                icon_url = tmp.find_element_by_tag_name("img").get_attribute("src")
+                if(icon_url != "https://s.pximg.net/common/images/no_profile.png"):
+                    icon_url = "https://i.pixiv.cat" + icon_url[icon_url.find("/user-profile/"):]
+                try:
+                    picture_url = self.driver.find_element_by_class_name("rp5asc-10.leQnFG").get_attribute("src")
+                    picture_url = "https://i.pixiv.cat/img-master" + picture_url[picture_url.find("/img/"):picture_url.rfind("_p0_")] + "_p0_master1200" + picture_url[-4:]
+                except:
+                    picture = False
+                find_user_id["header"]["contents"][1]["contents"][0]["url"] = icon_url
+                find_user_id["body"]["contents"][0]["text"] = artist_name
+                find_user_id["footer"]["contents"][0]["contents"][0]["action"]["uri"] = url
+                if(twitter):
+                    find_user_id["footer"]["contents"][1]["contents"][0]["action"]["uri"] = twitter_url
+                else:
+                    del find_user_id["footer"]["contents"][1]
+                if(picture):
+                    find_user_id["header"]["contents"][0]["url"] = picture_url
+                else:
+                    del find_user_id["header"]["contents"][0]
+                send_flex_message(reply_token, f"find_pixiv_id", find_user_id)
+                self.in_artist = True
+            else: #找作品
+                picture_url = self.driver.find_element_by_class_name("sc-1qpw8k9-1.fvHoJ").get_attribute("src")
+                picture_url = "https://i.pixiv.cat/img-master" + picture_url[picture_url.find("/img/"):picture_url.rfind("_p0_")] + "_p0_master1200" + picture_url[-4:]
+                tmp = self.driver.find_element_by_class_name("f30yhg-2.iKmMAb")
+                artist_name = tmp.find_element_by_tag_name("div").get_attribute("title")
+                icon_url = tmp.find_element_by_tag_name("img").get_attribute("src")
+                icon_url = "https://i.pixiv.cat" + icon_url[icon_url.find("/user-profile/"):icon_url.rfind("_50")] + "_170" + icon_url[-4:]
+                artist_page = tmp.find_element_by_tag_name("a").get_attribute("href")
+                title_page = url
+                title_name = self.driver.find_element_by_class_name("sc-1u8nu73-3.feoVvS").text
+                
+                find_artwork_id["hero"]["url"] = picture_url
+                find_artwork_id["hero"]["action"]["uri"] = picture_url
+                find_artwork_id["body"]["contents"][0]["text"] = title_name
+                find_artwork_id["body"]["contents"][0]["action"]["uri"] = title_page
+                find_artwork_id["footer"]["contents"][0]["contents"][0]["url"] = icon_url
+                find_artwork_id["footer"]["contents"][0]["contents"][0]["action"]["uri"] = artist_page
+                find_artwork_id["footer"]["contents"][1]["contents"][0]["text"] = artist_name
+                
+                send_flex_message(reply_token, f"find_artwork_id", find_artwork_id)
+                self.back_pixiv(event)
 
 
     def is_going_to_instruction(self, event):
@@ -184,16 +200,16 @@ class TocMachine(GraphMachine):
         user_id = event.source.user_id
         reply_token = event.reply_token
         if(self.last_state == "initial"):
-            send_push_message(user_id, TextSendMessage(text='menu =>進入選單'))
+            send_push_message(user_id, TextSendMessage(text='menu => 進入選單'))
             self.ins_back_ini()
         elif(self.last_state == "menu"):
-            send_push_message(user_id, TextSendMessage(text='menu =>進入選單\npixiv =>進入pixiv小工具'))
+            send_push_message(user_id, TextSendMessage(text='menu => 進入選單\npixiv => 進入pixiv小工具'))
             self.ins_back_menu()
         elif(self.last_state == "pixiv"):
-            send_push_message(user_id, TextSendMessage(text='menu =>進入選單\nusers id =>找繪師 ex:users 1234\nartworks id =>找作品 ex:artworks 1234\nwa scraw_depth=>隨便看看，scraw_depth為爬蟲深度 ex:wa 20\nwa => 隨便看看，圖從上一次爬蟲之中隨機挑選出'))
+            send_push_message(user_id, TextSendMessage(text='menu => 進入選單\nusers id => 找繪師 ex:users 1234\nartworks id => 找作品 ex:artworks 1234\nwa scraw_depth => 隨便看看，scraw_depth為爬蟲深度 ex:wa 20\nwa => 隨便看看，圖從上一次爬蟲之中隨機挑選出'))
             self.ins_back_pix()
         elif(self.last_state == "find_pixiv_id"):
-            send_push_message(user_id, TextSendMessage(text='menu =>進入選單\nad 年-月-日 =>找繪師從現在時間到某指定日期間的作品 ex:ad 2020-12-21\nrd 天數 =>找繪師從現在時間到幾天前之間的作品 ex:rd 10'))
+            send_push_message(user_id, TextSendMessage(text='menu => 進入選單\npixiv => 回pixiv小工具\nad 年-月-日 => 找繪師從現在時間到某指定日期間的作品 ex:ad 2020-12-21\nrd 天數 => 找繪師從現在時間到幾天前之間的作品 ex:rd 10\ndownload => 透過網址下載圖片(圖片為透過ad、rd指令取得的那些，建議將網址複製到無痕視窗，如果用一般視窗開的話可能要先清一下紀錄0.0)'))
             self.ins_back_find()
 
     def is_going_to_find_artist_artwork(self, event):
@@ -373,7 +389,8 @@ class TocMachine(GraphMachine):
                     print(allFileList[i])
                     zf.write('img/'+allFileList[i])
                     os.remove('img/'+allFileList[i])
-            send_push_message(user_id, TextSendMessage(text="https://testmylinebot777.herokuapp.com/download"))
+            send_push_message(user_id, TextSendMessage(text="https://testmylinebot777.herokuapp.com/download  (開無痕視窗輸入網址)"))
+            self.back_artist_artwork()
 
 def IsConnection(url):
     """
