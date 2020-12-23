@@ -127,7 +127,7 @@ def display_img():
 @app.route('/download')
 def downloadFile ():
     #For windows you need to use drive name [ex: F:/Example.pdf]
-    path = "/img/archive.zip"
+    path = "img/archive.zip"
     return send_file(path, as_attachment=True)
 
 
