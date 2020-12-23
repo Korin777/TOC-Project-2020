@@ -142,7 +142,7 @@ class TocMachine(GraphMachine):
             artist_name = tmp.get_attribute("title")
             icon_url = tmp.find_element_by_tag_name("img").get_attribute("src")
             icon_url = "https://i.pixiv.cat" + icon_url[icon_url.find("/user-profile/"):]
-            picture_url = self.driver.find_element_by_class_name("rp5asc-10.kJsXQy").get_attribute("src")
+            picture_url = self.driver.find_element_by_class_name("rp5asc-10.leQnFG").get_attribute("src")
             picture_url = "https://i.pixiv.cat/img-master" + picture_url[picture_url.find("/img/"):picture_url.rfind("_p0_")] + "_p0_master1200" + picture_url[-4:]
 
             find_user_id["header"]["contents"][0]["url"] = picture_url
@@ -351,7 +351,7 @@ class TocMachine(GraphMachine):
     def on_enter_download(self,event):
         user_id = event.source.user_id
         if(len(self.download_url) != 0):
-            yourPath = "./img"
+            yourPath = "img"
             try:
                 shutil.rmtree(yourPath)
             except OSError as e:
@@ -359,19 +359,19 @@ class TocMachine(GraphMachine):
             else:
                 print("The directory is deleted successfully")
 
-            os.makedirs('./img/',exist_ok=True)
+            os.makedirs('img/',exist_ok=True)
 
             for i in range(len(self.download_url)):
                 url = self.download_url[i]
                 r = requests.get(self.download_url[i])
-                with open('./img/'+self.download_url[i][self.download_url[i].find("/img/")+5:].replace("/","_"),'wb') as f:
+                with open('img/'+self.download_url[i][self.download_url[i].find("/img/")+5:].replace("/","_"),'wb') as f:
                 #將圖片下載下來
                     f.write(r.content)
             allFileList = os.listdir(yourPath)
-            with zipfile.ZipFile('./img/archive.zip', 'w') as zf:
+            with zipfile.ZipFile('img/archive.zip', 'w') as zf:
                 for i in range(len(allFileList)):
-                    zf.write('./img/'+allFileList[i])
-                    os.remove('./img/'+allFileList[i])
+                    zf.write('img/'+allFileList[i])
+                    os.remove('img/'+allFileList[i])
             send_push_message(user_id, TextSendMessage(text="https://testmylinebot777.herokuapp.com/download"))
 
 def IsConnection(url):
