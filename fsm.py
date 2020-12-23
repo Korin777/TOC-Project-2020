@@ -370,6 +370,7 @@ class TocMachine(GraphMachine):
             allFileList = os.listdir(yourPath)
             with zipfile.ZipFile('img/archive.zip', 'w') as zf:
                 for i in range(len(allFileList)):
+                    print(allFileList[i])
                     zf.write('img/'+allFileList[i])
                     os.remove('img/'+allFileList[i])
             send_push_message(user_id, TextSendMessage(text="https://testmylinebot777.herokuapp.com/download"))
