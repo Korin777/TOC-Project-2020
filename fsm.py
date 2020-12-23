@@ -26,9 +26,9 @@ class TocMachine(GraphMachine):
         self.in_pixiv = False
         self.in_artist = False
         self.last_state = "initial"
-        self.picture_url = []
+        self.correct_picture_url = []
         self.icon_url = []
-        self.title_name = []
+        self.correct_title_name = []
         self.container = []
         self.title_page = []
         self.artist_name = []
@@ -405,57 +405,66 @@ class TocMachine(GraphMachine):
                 print(end)
             if(end < 10):
                 end = 10
+            if(end > 40):
+                end = 40
             for x in range(1, end):
                 self.driver.execute_script("window.scrollTo(0,"+str(1000*x)+")")
-                time.sleep(0.5)
-            time.sleep(1)
-            self.picture_url = self.driver.find_elements_by_class_name("_thumbnail.ui-scroll-view")
+                time.sleep(0.25)
+            time.sleep(3)
+            picture_url = self.driver.find_elements_by_class_name("_thumbnail.ui-scroll-view")
+            self.correct_picture_url = []
             self.icon_url = []
-            self.title_name = self.driver.find_elements_by_css_selector("a.title")
+            title_name = self.driver.find_elements_by_css_selector("a.title")
+            self.correct_title_name = []
             self.container = self.driver.find_elements_by_class_name("user-container.ui-profile-popup")
             self.title_page = []
             self.artist_name = []
             self.artist_page = []
+            append_num = []
             self.correct = 0
-            print(len(self.picture_url),len(self.icon_url))
-            for i in range(len(self.picture_url)):
-                self.picture_url[i] = self.picture_url[i].get_attribute("src")
+            print(len(picture_url),len(self.container))
+            for i in range(len(picture_url)):
+                picture_url[i] = picture_url[i].get_attribute("src")
                 # print(i,picture_url[i])
-                if "https:" not in self.picture_url[i]:
+                if "https:" not in picture_url[i]:
                     self.correct = i
                     break
-                self.picture_url[i] = "https://i.pixiv.cat/img-master" + self.picture_url[i][self.picture_url[i].find("/img/"):self.picture_url[i].rfind("_p0_")] + "_p0_master1200" + self.picture_url[i][-4:]
-
-            for i in range(self.correct):
+                else:
+                    picture_url[i] = "https://i.pixiv.cat/img-master" + picture_url[i][picture_url[i].find("/img/"):picture_url[i].rfind("_p0_")] + "_p0_master1200" + picture_url[i][-4:]
+                    self.correct_picture_url.append(picture_url[i])
+                    append_num.append(i)
+            for i in append_num:
                 self.icon_url.append(self.container[i].get_attribute("data-profile_img"))
                 # print(icon_url[i])
-                self.icon_url[i] = "https://i.pixiv.cat" + self.icon_url[i][self.icon_url[i].find("/user-profile/"):self.icon_url[i].rfind("_50")] + "_170" + self.icon_url[i][-4:]
+                if(self.icon_url[-1] != "https://s.pximg.net/common/images/no_profile_s.png"):
+                    self.icon_url[-1] = "https://i.pixiv.cat" + self.icon_url[-1][self.icon_url[-1].find("/user-profile/"):self.icon_url[-1].rfind("_50")] + "_170" + self.icon_url[-1][-4:]
                 # print(icon_url[i])
-            for i in range(self.correct):
-                self.title_page.append(self.title_name[i].get_attribute("href"))
-                self.title_name[i] = self.title_name[i].text
+            for i in append_num:
+                self.title_page.append(title_name[i].get_attribute("href"))
+                self.correct_title_name.append(title_name[i].text)
                 # print(title_name[i],title_page[i])
-            for i in range(self.correct):
+            for i in append_num:
                 self.artist_name.append(self.container[i].get_attribute("data-user_name"))
                 self.artist_page.append(self.container[i].get_attribute("href"))
                 # print(artist_name[i],artist_page[i])
-            print(self.correct)
             self.appear_list = []
             self.re_scraw = False
             self.driver.get("https://www.pixiv.net/ranking.php")
+            print(len(append_num))
+            print(len(self.correct_picture_url),len(self.icon_url),len(self.artist_name),len(self.artist_page),len(self.correct_title_name),len(self.title_page))
 
         for i in range(len(walk_around["contents"])):
-            tmp = random.randint(0,self.correct-1)
+            tmp = random.randint(0,len(self.correct_picture_url)-1)
             while(tmp in self.appear_list):
-                tmp = random.randint(0,self.correct-1)
+                tmp = random.randint(0,len(self.correct_picture_url)-1)
             self.appear_list.append(tmp)
-            if( (self.correct-len(self.appear_list))<10 or (len(self.appear_list)/self.correct)>0.75):
+            if( (len(self.correct_picture_url)-len(self.appear_list))<10 or (len(self.appear_list)/len(self.correct_picture_url))>0.75):
                 self.appear_list = []
             print(tmp)
-            print(self.picture_url[tmp],self.icon_url[tmp],self.title_name[tmp])
-            walk_around["contents"][i]["hero"]["url"] = self.picture_url[tmp]
+            print(self.correct_picture_url[tmp],self.icon_url[tmp],self.correct_title_name[tmp])
+            walk_around["contents"][i]["hero"]["url"] = self.correct_picture_url[tmp]
             walk_around["contents"][i]["hero"]["action"]["uri"] = self.picture_url[tmp]
-            walk_around["contents"][i]["body"]["contents"][0]["text"] = self.title_name[tmp]
+            walk_around["contents"][i]["body"]["contents"][0]["text"] = self.correct_title_name[tmp]
             walk_around["contents"][i]["body"]["contents"][0]["action"]["uri"] = self.title_page[tmp]
             walk_around["contents"][i]["footer"]["contents"][0]["contents"][0]["url"] = self.icon_url[tmp]
             walk_around["contents"][i]["footer"]["contents"][0]["contents"][0]["action"]["uri"] = self.artist_page[tmp]
