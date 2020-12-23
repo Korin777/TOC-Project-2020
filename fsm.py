@@ -364,7 +364,7 @@ class TocMachine(GraphMachine):
             for i in range(len(self.download_url)):
                 url = self.download_url[i]
                 r = requests.get(self.download_url[i])
-                with open('./img/'+self.download_url[i][self.download_url[i].find("/img/")+5:],'wb') as f:
+                with open('./img/'+self.download_url[i][self.download_url[i].find("/img/")+5:].replace("/","_"),'wb') as f:
                 #將圖片下載下來
                     f.write(r.content)
             allFileList = os.listdir(yourPath)
