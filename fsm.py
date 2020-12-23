@@ -87,7 +87,8 @@ class TocMachine(GraphMachine):
                     j += 1
                 else:
                     icon_url.append(picture[i].get_attribute("src"))
-                    icon_url[k] = "https://i.pixiv.cat" + icon_url[k][icon_url[k].find("/user-profile/"):icon_url[k].rfind("_50")] + "_170" + icon_url[k][-4:]
+                    if(icon_url[k] != "https://s.pximg.net/common/images/no_profile_s.png"):
+                        icon_url[k] = "https://i.pixiv.cat" + icon_url[k][icon_url[k].find("/user-profile/"):icon_url[k].rfind("_50")] + "_170" + icon_url[k][-4:]
                     # print(icon_url[k])
                     k += 1
             j = 0
@@ -280,7 +281,8 @@ class TocMachine(GraphMachine):
                 tmp = self.driver.find_element_by_class_name("f30yhg-2.iKmMAb")
                 artist_name = tmp.find_element_by_tag_name("div").get_attribute("title")
                 icon_url = tmp.find_element_by_tag_name("img").get_attribute("src")
-                icon_url = "https://i.pixiv.cat" + icon_url[icon_url.find("/user-profile/"):icon_url.rfind("_50")] + "_170" + icon_url[-4:]
+                if(icon_url != "https://s.pximg.net/common/images/no_profile_s.png"):
+                    icon_url = "https://i.pixiv.cat" + icon_url[icon_url.find("/user-profile/"):icon_url.rfind("_50")] + "_170" + icon_url[-4:]
                 artist_page = tmp.find_element_by_tag_name("a").get_attribute("href")
                 title_page = url
                 title_name = self.driver.find_element_by_class_name("sc-1u8nu73-3.feoVvS").text
@@ -428,7 +430,6 @@ class TocMachine(GraphMachine):
                 # print(i,picture_url[i])
                 if "https:" not in picture_url[i]:
                     self.correct = i
-                    break
                 else:
                     picture_url[i] = "https://i.pixiv.cat/img-master" + picture_url[i][picture_url[i].find("/img/"):picture_url[i].rfind("_p0_")] + "_p0_master1200" + picture_url[i][-4:]
                     self.correct_picture_url.append(picture_url[i])
