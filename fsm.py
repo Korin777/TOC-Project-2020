@@ -2,7 +2,7 @@ from transitions.extensions import GraphMachine
 
 from utils import send_text_message, send_flex_message, send_push_message
 
-from content import menu,pixiv,find_artwork_id,walk_around,back_up_uid
+from content import menu,pixiv,find_artwork_id,walk_around
 
 from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageSendMessage, FlexSendMessage
 
