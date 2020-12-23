@@ -349,6 +349,7 @@ class TocMachine(GraphMachine):
         return text.lower() == "download"
 
     def on_enter_download(self,event):
+        user_id = event.source.user_id
         if(len(self.download_url) != 0):
             try:
                 shutil.rmtree(yourPath)
@@ -370,6 +371,7 @@ class TocMachine(GraphMachine):
                 for i in range(len(allFileList)):
                     zf.write('./img/'+allFileList[i])
                     os.remove('./img/'+allFileList[i])
+            send_push_message(user_id, TextSendMessage(text="https://testmylinebot777.herokuapp.com/download"))
 
 def IsConnection(url):
     """
