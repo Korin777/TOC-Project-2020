@@ -463,7 +463,7 @@ class TocMachine(GraphMachine):
             print(tmp)
             print(self.correct_picture_url[tmp],self.icon_url[tmp],self.correct_title_name[tmp])
             walk_around["contents"][i]["hero"]["url"] = self.correct_picture_url[tmp]
-            walk_around["contents"][i]["hero"]["action"]["uri"] = self.picture_url[tmp]
+            walk_around["contents"][i]["hero"]["action"]["uri"] = self.correct_picture_url[tmp]
             walk_around["contents"][i]["body"]["contents"][0]["text"] = self.correct_title_name[tmp]
             walk_around["contents"][i]["body"]["contents"][0]["action"]["uri"] = self.title_page[tmp]
             walk_around["contents"][i]["footer"]["contents"][0]["contents"][0]["url"] = self.icon_url[tmp]
