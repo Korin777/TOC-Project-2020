@@ -2,7 +2,7 @@ from transitions.extensions import GraphMachine
 
 from utils import send_text_message, send_flex_message, send_push_message
 
-from content import menu,pixiv,find_artwork_id, find_user_id,walk_around,back_up_uid
+from content import menu,pixiv,find_artwork_id,walk_around,back_up_uid
 
 from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageSendMessage, FlexSendMessage
 
@@ -140,7 +140,102 @@ class TocMachine(GraphMachine):
             self.driver.get(url)
             time.sleep(3)
             if(self.stay): #找作者
-                find_user_id = back_up_uid
+                find_user_id = {
+                    "type": "bubble",
+                    "size": "giga",
+                    "header": {
+                        "type": "box",
+                        "layout": "horizontal",
+                        "contents": [
+                        {
+                            "type": "image",
+                            "url": "https://i.pixiv.cat/img-master/img/2020/12/13/15/32/26/86274118_p0_master1200.jpg",
+                            "size": "full",
+                            "aspectMode": "cover"
+                        },
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                            {
+                                "type": "image",
+                                "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png",
+                                "size": "full",
+                                "aspectMode": "cover"
+                            }
+                            ],
+                            "width": "100px",
+                            "height": "100px",
+                            "cornerRadius": "100px",
+                            "offsetStart": "35%",
+                            "position": "absolute",
+                            "paddingAll": "none",
+                            "offsetTop": "10%"
+                        }
+                        ],
+                        "spacing": "none",
+                        "position": "relative",
+                        "width": "400px",
+                        "height": "150px",
+                        "paddingAll": "0px"
+                    },
+                    "body": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                        {
+                            "type": "text",
+                            "text": "作者名稱",
+                            "weight": "bold",
+                            "style": "normal"
+                        }
+                        ],
+                        "alignItems": "center"
+                    },
+                    "footer": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                            {
+                                "type": "button",
+                                "action": {
+                                "type": "uri",
+                                "label": "Pixiv",
+                                "uri": "http://linecorp.com/"
+                                },
+                                "color": "#111111"
+                            }
+                            ],
+                            "cornerRadius": "10px",
+                            "borderColor": "#6C6C6C",
+                            "borderWidth": "normal"
+                        },
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                            {
+                                "type": "button",
+                                "action": {
+                                "type": "uri",
+                                "label": "Twitter",
+                                "uri": "http://linecorp.com/"
+                                },
+                                "color": "#111111"
+                            }
+                            ],
+                            "borderWidth": "normal",
+                            "borderColor": "#6C6C6C",
+                            "cornerRadius": "10px",
+                            "margin": "10px"
+                        }
+                        ]
+                    }
+                }
                 twitter, picture = True, True               
                 tmp = self.driver.find_element_by_class_name("_2AOtfl9")
                 twitter_url = ""
@@ -436,3 +531,4 @@ def IsConnection(url):
         print(e.reason)
         return False
     return True
+
