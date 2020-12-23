@@ -140,6 +140,7 @@ class TocMachine(GraphMachine):
             self.driver.get(url)
             time.sleep(3)
             if(self.stay): #找作者
+                find_user_id = back_up_uid
                 twitter, picture = True, True               
                 tmp = self.driver.find_element_by_class_name("_2AOtfl9")
                 twitter_url = ""
@@ -198,7 +199,6 @@ class TocMachine(GraphMachine):
                 find_artwork_id["footer"]["contents"][1]["contents"][0]["text"] = artist_name
                 
                 send_flex_message(reply_token, f"find_artwork_id", find_artwork_id)
-                find_user_id = back_up_uid
                 self.back_pixiv(event)
 
 
