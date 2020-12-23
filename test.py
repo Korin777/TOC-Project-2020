@@ -33,11 +33,11 @@ with open('./img/圖片名稱','wb') as f:
 #     zf.write('./img/1.jpg')
 #     zf.write('./img/2.jpg')
 
-import shutil
-pathTest = "./img"
-try:
-    shutil.rmtree(pathTest)
-except OSError as e:
-    print(e)
-else:
-    print("The directory is deleted successfully")
+# import shutil
+# pathTest = "./img"
+# try:
+#     shutil.rmtree(pathTest)
+# except OSError as e:
+#     print(e)
+# else:
+#     print("The directory is deleted successfully")

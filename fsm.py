@@ -351,8 +351,6 @@ class TocMachine(GraphMachine):
     def on_enter_download(self,event):
         user_id = event.source.user_id
         if(len(self.download_url) != 0):
-
-            os.makedirs('./img/',exist_ok=True)
             yourPath = "./img"
             try:
                 shutil.rmtree(yourPath)
@@ -360,6 +358,8 @@ class TocMachine(GraphMachine):
                 print(e)
             else:
                 print("The directory is deleted successfully")
+
+            os.makedirs('./img/',exist_ok=True)
 
             for i in range(len(self.download_url)):
                 url = self.download_url[i]
