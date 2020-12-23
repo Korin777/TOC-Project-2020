@@ -1,44 +1,119 @@
 menu = {
-    "type":"bubble",
-    "header": {
-        "type":"box",
-        "layout":"vertical",
-        "spacing":"md",
-        "contents":[
-            {
-                "type":"text",
-                "text":"Korin's Bot",
-                "size":"lg",
-                "weight":"bold",
-                "color":"#c70039"
+  "type": "carousel",
+  "contents": [
+    {
+      "type": "bubble",
+      "header": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "Korin Bot(主選單)",
+            "align": "center",
+            "color": "#750000",
+            "size": "xxl",
+            "weight": "bold"
+          },
+          {
+            "type": "separator",
+            "color": "#272727"
+          }
+        ]
+      },
+      "hero": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "簡介:",
+            "size": "xl",
+            "weight": "bold"
+          },
+          {
+            "type": "text",
+            "text": "輸入instruction列出當下能下的指令",
+            "color": "#000000",
+            "weight": "bold"
+          },
+          {
+            "type": "text",
+            "text": "輸入fsm取得狀態機結構圖",
+            "size": "md",
+            "color": "#000000",
+            "weight": "bold"
+          },
+          {
+            "type": "separator",
+            "color": "#750000",
+            "margin": "xs"
+          },
+          {
+            "type": "text",
+            "text": "紀錄:",
+            "size": "xl",
+            "weight": "bold"
+          },
+          {
+            "type": "text",
+            "text": "一些用到的工具",
+            "size": "md",
+            "margin": "xs",
+            "color": "#000000",
+            "weight": "bold"
+          },
+          {
+            "type": "text",
+            "text": "Selenium、Heroku、Flask、transitions",
+            "size": "sm"
+          },
+          {
+            "type": "text",
+            "text": "透過圖片代理解決pixiv圖源禁止外連",
+            "size": "md",
+            "color": "#000000",
+            "weight": "bold"
+          },
+          {
+            "type": "text",
+            "text": "src : https://pixiv.cat/",
+            "size": "sm",
+            "action": {
+              "type": "uri",
+              "label": "action",
+              "uri": "https://pixiv.cat/"
             }
-        ]
-    },
-    "body":{
-        "type":"box",
-        "layout":"vertical",
-        "spacing":"md",
-        "contents":[
-            {
-                "type":"separator",
-                "color":"#c70039",
-            },
-            {
-                "type":"text",
-                "text":"第一個物件",
-                "size":"md"              
-            },
-            {
-                "type":"separator",
-                "color":"#c70039"
-            },
-            {
-                "type":"text",
-                "text":"第二個物件",
-                "size":"md"              
-            }        
-        ]
+          },
+          {
+            "type": "text",
+            "text": "Source Code",
+            "color": "#000000",
+            "weight": "bold",
+            "size": "md"
+          },
+          {
+            "type": "text",
+            "text": "https://github.com/Korin777/TOC-Project-2020",
+            "size": "sm",
+            "action": {
+              "type": "uri",
+              "label": "action",
+              "uri": "https://github.com/Korin777/TOC-Project-2020"
+            }
+          }
+        ],
+        "margin": "none",
+        "spacing": "none",
+        "offsetStart": "2%"
+      },
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": []
+      }
     }
+  ]
 }
 
 
@@ -51,7 +126,7 @@ pixiv = {
       "hero": {
         "type": "image",
         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Pixiv_logo.svg/154px-Pixiv_logo.svg.png",
-        "size": "50%",
+        "size": "xxl",
         "aspectMode": "fit",
         "action": {
           "type": "uri",
@@ -66,7 +141,13 @@ pixiv = {
             "type": "text",
             "text": "Pixiv小工具",
             "weight": "bold",
-            "size": "xl"
+            "size": "xxl",
+            "color": "#AE0000"
+          },
+          {
+            "type": "separator",
+            "margin": "none",
+            "color": "#600000"
           },
           {
             "type": "box",
@@ -75,16 +156,31 @@ pixiv = {
             "contents": [
               {
                 "type": "text",
-                "text": "找繪師",
-                "color": "#666666",
-                "size": "md"
+                "color": "#000000",
+                "size": "xl",
+                "text": "找繪師or作品",
+                "margin": "md"
               },
               {
                 "type": "text",
-                "text": "找作品",
-                "wrap": True,
-                "color": "#666666",
-                "size": "md"
+                "text": "查詢繪師近期作品",
+                "color": "#000000",
+                "size": "xl",
+                "margin": "lg"
+              },
+              {
+                "type": "text",
+                "text": "下載查詢到的圖片",
+                "size": "xl",
+                "color": "#000000",
+                "margin": "lg"
+              },
+              {
+                "type": "text",
+                "text": "隨機抓取每日排行榜及推薦的圖",
+                "size": "xl",
+                "color": "#000000",
+                "margin": "lg"
               }
             ]
           }
@@ -110,7 +206,10 @@ pixiv = {
       },
       "styles": {
         "hero": {
-          "backgroundColor": "#272727"
+          "backgroundColor": "#F1E1FF"
+        },
+        "body": {
+          "backgroundColor": "#F1E1FF"
         }
       }
     },

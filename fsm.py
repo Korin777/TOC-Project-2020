@@ -47,7 +47,6 @@ class TocMachine(GraphMachine):
         print("I'm entering menu")
         self.last_state = self.state
         user_id = event.source.user_id
-        send_push_message(user_id,ImageSendMessage(original_content_url='https://testmylinebot777.herokuapp.com/',preview_image_url='https://testmylinebot777.herokuapp.com/'))
         self.in_pixiv = False
         self.in_artist = False
         reply_token = event.reply_token
@@ -402,6 +401,27 @@ class TocMachine(GraphMachine):
                     os.remove('img/'+allFileList[i])
             send_push_message(user_id, TextSendMessage(text="https://testmylinebot777.herokuapp.com/download  (開無痕視窗輸入網址)"))
             self.back_artist_artwork()
+        
+    def is_going_to_fsm(self,event):
+        text = event.message.text
+
+        return text.lower() == "fsm"
+
+    def on_enter_fsm(self,event):
+        print("I'm entering work fsm")
+        user_id = event.source.user_id
+        reply_token = event.reply_token   
+
+        send_push_message(user_id,ImageSendMessage(original_content_url='https://testmylinebot777.herokuapp.com/',preview_image_url='https://testmylinebot777.herokuapp.com/'))         
+        send_text_message(reply_token,"current state:"+str(self.last_state))
+        if(self.last_state == "initial"):
+            self.ins_back_ini()
+        elif(self.last_state == "menu"):
+            self.ins_back_menu()
+        elif(self.last_state == "pixiv"):
+            self.ins_back_pix()
+        elif(self.last_state == "find_pixiv_id"):
+            self.ins_back_find()
 
 def IsConnection(url):
     """
