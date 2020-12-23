@@ -59,6 +59,7 @@ class TocMachine(GraphMachine):
     def on_enter_pixiv(self, event):
         print("I'm entering pixiv")
         self.last_state = self.state
+        self.in_artist = False
         user_id = event.source.user_id
         if(not self.in_pixiv):
             self.driver.get("https://www.pixiv.net/")
@@ -213,13 +214,13 @@ class TocMachine(GraphMachine):
             send_push_message(user_id, TextSendMessage(text='menu => 進入選單'))
             self.ins_back_ini()
         elif(self.last_state == "menu"):
-            send_push_message(user_id, TextSendMessage(text='menu => 進入選單\npixiv => 進入pixiv小工具'))
+            send_push_message(user_id, TextSendMessage(text='menu => 進入選單\n\npixiv => 進入pixiv小工具'))
             self.ins_back_menu()
         elif(self.last_state == "pixiv"):
-            send_push_message(user_id, TextSendMessage(text='menu => 進入選單\nusers id => 找繪師 ex:users 1234\nartworks id => 找作品 ex:artworks 1234\nwa scraw_depth => 隨便看看，scraw_depth為爬蟲深度 ex:wa 20\nwa => 隨便看看，圖從上一次爬蟲之中隨機挑選出'))
+            send_push_message(user_id, TextSendMessage(text='menu => 進入選單\n\nusers id => 找繪師 ex:users 1234\n\nartworks id => 找作品 ex:artworks 1234\n\nwa scraw_depth => 隨便看看，scraw_depth為爬蟲深度 ex:wa 20\n\nwa => 隨便看看，圖從上一次爬蟲之中隨機挑選出'))
             self.ins_back_pix()
         elif(self.last_state == "find_pixiv_id"):
-            send_push_message(user_id, TextSendMessage(text='menu => 進入選單\npixiv => 回pixiv小工具\nad 年-月-日 => 找繪師從現在時間到某指定日期間的作品 ex:ad 2020-12-21\nrd 天數 => 找繪師從現在時間到幾天前之間的作品 ex:rd 10\ndownload => 透過網址下載圖片(圖片為透過ad、rd指令取得的那些，建議將網址複製到無痕視窗，如果用一般視窗開的話可能要先清一下紀錄0.0)'))
+            send_push_message(user_id, TextSendMessage(text='menu => 進入選單\n\npixiv => 回pixiv小工具\n\nad 年-月-日 => 找繪師從現在時間到某指定日期間的作品 ex:ad 2020-12-21\n\nrd 天數 => 找繪師從現在時間到幾天前之間的作品 ex:rd 10\n\ndownload => 透過網址下載圖片(圖片為透過ad、rd指令取得的那些，建議將網址複製到無痕視窗，如果用一般視窗開的話可能要先清一下紀錄0.0)'))
             self.ins_back_find()
 
     def is_going_to_find_artist_artwork(self, event):

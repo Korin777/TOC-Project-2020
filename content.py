@@ -3,6 +3,7 @@ menu = {
   "contents": [
     {
       "type": "bubble",
+      "size": "giga",
       "header": {
         "type": "box",
         "layout": "vertical",
