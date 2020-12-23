@@ -21,7 +21,7 @@ menu = {
           }
         ]
       },
-      "hero": {
+      "body": {
         "type": "box",
         "layout": "vertical",
         "contents": [
@@ -48,7 +48,16 @@ menu = {
             "type": "separator",
             "color": "#750000",
             "margin": "xs"
-          },
+          }
+        ],
+        "margin": "none",
+        "spacing": "none",
+        "offsetTop": "-20%"
+      },
+      "footer": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
           {
             "type": "text",
             "text": "紀錄:",
@@ -103,14 +112,8 @@ menu = {
             }
           }
         ],
-        "margin": "none",
-        "spacing": "none",
-        "offsetStart": "2%"
-      },
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "contents": []
+        "offsetTop": "-20%",
+        "offsetStart": "3%"
       }
     }
   ]
