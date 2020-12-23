@@ -198,7 +198,7 @@ class TocMachine(GraphMachine):
                 find_artwork_id["footer"]["contents"][1]["contents"][0]["text"] = artist_name
                 
                 send_flex_message(reply_token, f"find_artwork_id", find_artwork_id)
-                find_artwork_id = back_up_uid
+                find_user_id = back_up_uid
                 self.back_pixiv(event)
 
 

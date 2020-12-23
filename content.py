@@ -113,7 +113,7 @@ menu = {
             }
           }
         ],
-        "offsetTop": "-20%",
+        "offsetTop": "-10%",
         "offsetStart": "3%"
       }
     }
@@ -206,14 +206,20 @@ pixiv = {
             }
           }
         ],
-        "flex": 0
+        "flex": 0,
+        "borderWidth": "medium",
+        "borderColor": "#000000",
+        "cornerRadius": "10px"
       },
       "styles": {
         "hero": {
-          "backgroundColor": "#F1E1FF"
+          "backgroundColor": "#F0F0F0F0"
         },
         "body": {
-          "backgroundColor": "#F1E1FF"
+          "backgroundColor": "#F0F0F0F0"
+        },
+        "footer": {
+          "backgroundColor": "#F0F0F0F0"
         }
       }
     },
@@ -287,8 +293,9 @@ pixiv = {
                 "type": "text",
                 "text": "繪師名稱",
                 "align": "center",
-                "margin": "md",
-                "contents": []
+                "margin": "none",
+                "contents": [],
+                "size": "lg"
               }
             ],
             "offsetTop": "20px"
