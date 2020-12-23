@@ -2,7 +2,7 @@ from transitions.extensions import GraphMachine
 
 from utils import send_text_message, send_flex_message, send_push_message
 
-from content import menu,pixiv,find_artwork_id, find_user_id,walk_around
+from content import menu,pixiv,find_artwork_id, find_user_id,walk_around,back_up_uid
 
 from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageSendMessage, FlexSendMessage
 
@@ -65,7 +65,7 @@ class TocMachine(GraphMachine):
             self.driver.get("https://www.pixiv.net/")
             reply_token = event.reply_token
             send_push_message(user_id, TextSendMessage(text='請稍後回應...'))
-            time.sleep(5)
+            time.sleep(3)
 
             container = self.driver.find_element_by_class_name("gtm-toppage-thumbnail-illustration-recommend-works-zone")
             picture = container.find_elements_by_tag_name("img")
@@ -122,6 +122,8 @@ class TocMachine(GraphMachine):
         artwork_pattern = r"(artworks )+[0-9]*"
         if((re.fullmatch(user_pattern,text.lower())) != None):
             self.stay = True
+        else:
+            self.stay = False
         return ((re.fullmatch(user_pattern,text.lower())) != None) or ((re.fullmatch(artwork_pattern,text.lower())) != None)
     
     def on_enter_find_pixiv_id(self, event):
@@ -132,18 +134,26 @@ class TocMachine(GraphMachine):
             print(url)
             reply_token = event.reply_token
             if(not IsConnection(url)):
-                self.back_pixiv()
                 send_text_message(reply_token,"此id不存在")
+                self.back_pixiv(event)
                 return
             self.driver.get(url)
             time.sleep(3)
             if(self.stay): #找作者
                 twitter, picture = True, True               
                 tmp = self.driver.find_element_by_class_name("_2AOtfl9")
+                twitter_url = ""
                 try:
-                    twitter_url = tmp.find_element_by_tag_name("a").get_attribute("href")
-                    twitter_url = "https://twitter.com/" + twitter_url[twitter_url.find(".com%2" + "F")+7:]
+                    tmp_twitter_url = tmp.find_elements_by_tag_name("a")
+                    for i in range(len(tmp_twitter_url)):
+                        tmp_twitter_url[i] = tmp_twitter_url[i].get_attribute("href")
+                        if(tmp_twitter_url[i].contain("twitter")):
+                            twitter_url = tmp_twitter_url[i]
+                            twitter_url = "https://twitter.com/" + twitter_url[twitter_url.find(".com%2" + "F")+7:]
+                            break
                 except:
+                    twitter = False
+                if(twitter_url == ""):
                     twitter = False
                 tmp = self.driver.find_element_by_class_name("sc-1asno00-0.ihWmWP")
                 artist_name = tmp.get_attribute("title")
@@ -188,6 +198,7 @@ class TocMachine(GraphMachine):
                 find_artwork_id["footer"]["contents"][1]["contents"][0]["text"] = artist_name
                 
                 send_flex_message(reply_token, f"find_artwork_id", find_artwork_id)
+                find_artwork_id = back_up_uid
                 self.back_pixiv(event)
 
 
