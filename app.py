@@ -44,7 +44,7 @@ load_dotenv()
 
 
 machine = TocMachine(driver = driver,#driver2 = driver2,
-    states=["initial", "menu", "pixiv", "find_pixiv_id","instruction","find_artist_artwork","walk_around"],
+    states=["initial", "menu", "pixiv", "find_pixiv_id","instruction","find_artist_artwork","walk_around","download"],
     transitions=[
         {"trigger": "advance", "source": "initial", "dest": "menu", "conditions": "is_going_to_menu"},
         {"trigger": "advance", "source": "menu", "dest": "pixiv", "conditions": "is_going_to_pixiv"},
@@ -53,6 +53,7 @@ machine = TocMachine(driver = driver,#driver2 = driver2,
         {"trigger": "advance", "source": "*", "dest": "instruction", "conditions": "is_going_to_instruction"},
         {"trigger": "advance", "source": "find_pixiv_id", "dest": "find_artist_artwork", "conditions": "is_going_to_find_artist_artwork"},
         {"trigger": "advance", "source": "pixiv", "dest": "walk_around", "conditions": "is_going_to_walk_around"},
+        {"trigger": "advance", "source": "find_pixiv_id", "dest": "download", "conditions": "is_going_to_download"},
 
 
         {"trigger": "back_pixiv", "source": ["find_pixiv_id","walk_around"], "dest": "pixiv"},
@@ -121,6 +122,13 @@ def display_img():
         return response
     else:
         pass
+
+
+@app.route('/download')
+def downloadFile ():
+    #For windows you need to use drive name [ex: F:/Example.pdf]
+    path = "fsm.png"
+    return send_file(path, as_attachment=True)
 
 
 

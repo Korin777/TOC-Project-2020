@@ -9,8 +9,12 @@ from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageSend
 import re
 import urllib.request
 import random
-
-
+import zipfile
+import shutil
+#載入requests套件
+import requests
+#需要載入os套件，可處理文件和目錄
+import os
 import time
 
 
@@ -31,6 +35,7 @@ class TocMachine(GraphMachine):
         self.re_scraw = True
         self.correct = 0
         self.appear_list = []
+        self.download_url = []
 
 
     def is_going_to_menu(self, event):
@@ -76,7 +81,7 @@ class TocMachine(GraphMachine):
                 if(picture[i].get_attribute("class") == "rp5asc-10 leQnFG"):
                     picture_url.append(picture[i].get_attribute("src"))
                     picture_url[j] = "https://i.pixiv.cat/img-master" + picture_url[j][picture_url[j].find("/img/"):picture_url[j].rfind("_p0_")] + "_p0_master1200" + picture_url[j][-4:]
-                    print(picture_url[j])
+                    # print(picture_url[j])
                     j += 1
                 else:
                     icon_url.append(picture[i].get_attribute("src"))
@@ -207,6 +212,7 @@ class TocMachine(GraphMachine):
         absdate_pattern = r"(ad )+([0-9]*)+(-)+([0-9]*)+(-)+[0-9]*"
         # reldate_pattern = r"(rd )+[0-9]*"
         if((re.fullmatch(absdate_pattern,text.lower())) != None): # 到某個指定日期
+            self.download_url = []
             localtime = time.time()
             # a = "2013-10-10 23:40:00"
             timeArray = time.strptime(text.split(" ")[1]+" 00:00:00", "%Y-%m-%d %H:%M:%S")
@@ -227,8 +233,10 @@ class TocMachine(GraphMachine):
                     self.back_id()  
                     return 
                 picture_url[i] = "https://i.pixiv.cat/img-master" + picture_url[i][picture_url[i].find("/img/"):picture_url[i].rfind("_p0_")] + "_p0_master1200" + picture_url[i][-4:]
+                self.download_url.append(picture_url[i])
                 send_push_message(user_id,ImageSendMessage(original_content_url=picture_url[i],preview_image_url=picture_url[i]))
         else: #幾天前
+            self.download_url = []
             localtime = time.time()
             targettime = localtime - int(text.split(" ")[1])*86400
             picture_url = self.driver.find_elements_by_css_selector("img.rp5asc-10.leQnFG")
@@ -246,6 +254,7 @@ class TocMachine(GraphMachine):
                     self.back_id()  
                     return 
                 picture_url[i] = "https://i.pixiv.cat/img-master" + picture_url[i][picture_url[i].find("/img/"):picture_url[i].rfind("_p0_")] + "_p0_master1200" + picture_url[i][-4:]
+                self.download_url.append(picture_url[i])
                 send_push_message(user_id,ImageSendMessage(original_content_url=picture_url[i],preview_image_url=picture_url[i]))
         self.back_id()   
         
@@ -334,7 +343,33 @@ class TocMachine(GraphMachine):
         send_push_message(user_id,FlexSendMessage(alt_text='error',contents=walk_around))
         self.back_pixiv()
 
+    def is_going_to_download(self,event):
+        text = event.message.text
 
+        return text.lower() == "download"
+
+    def on_enter_download(self,event):
+        if(len(self.download_url) != 0):
+            try:
+                shutil.rmtree(yourPath)
+            except OSError as e:
+                print(e)
+            else:
+                print("The directory is deleted successfully")
+
+            os.makedirs('./img/',exist_ok=True)
+            yourPath = "./img"
+            for i in range(len(self.download_url)):
+                url = self.download_url[i]
+                r = requests.get(self.download_url[i])
+                with open('./img/'+self.download_url[i][self.download_url[i].find("/img/")+5:],'wb') as f:
+                #將圖片下載下來
+                    f.write(r.content)
+            allFileList = os.listdir(yourPath)
+            with zipfile.ZipFile('./img/archive.zip', 'w') as zf:
+                for i in range(len(allFileList)):
+                    zf.write('./img/'+allFileList[i])
+                    os.remove('./img/'+allFileList[i])
 
 def IsConnection(url):
     """

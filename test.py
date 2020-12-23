@@ -16,7 +16,7 @@ print(re.fullmatch(absdate_pattern,a))
 
 c = "012"
 
-# #載入requests套件
+#載入requests套件
 import requests
 #需要載入os套件，可處理文件和目錄
 import os
@@ -28,7 +28,16 @@ with open('./img/圖片名稱','wb') as f:
 #將圖片下載下來
     f.write(r.content)
 
-import zipfile
-with zipfile.ZipFile('./img/archive.zip', 'w') as zf:
-    zf.write('./img/1.jpg')
-    zf.write('./img/2.jpg')
+# import zipfile
+# with zipfile.ZipFile('./img/archive.zip', 'w') as zf:
+#     zf.write('./img/1.jpg')
+#     zf.write('./img/2.jpg')
+
+import shutil
+pathTest = "./img"
+try:
+    shutil.rmtree(pathTest)
+except OSError as e:
+    print(e)
+else:
+    print("The directory is deleted successfully")
