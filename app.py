@@ -45,7 +45,7 @@ load_dotenv()
 
 machine = TocMachine(driver = driver,#driver2 = driver2,
     states=["initial", "menu", "pixiv", "find_pixiv_id","instruction","find_artist_artwork","walk_around","download", "fsm"],
-    transitions=[
+    transitions=[   
         {"trigger": "advance", "source": "initial", "dest": "menu", "conditions": "is_going_to_menu"},
         {"trigger": "advance", "source": ["menu","find_pixiv_id"], "dest": "pixiv", "conditions": "is_going_to_pixiv"},
         {"trigger": "advance", "source": "pixiv", "dest": "find_pixiv_id", "conditions": "is_going_to_find_pixiv_id"},
