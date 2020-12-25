@@ -113,7 +113,7 @@ menu = {
             }
           }
         ],
-        "offsetTop": "-10%",
+        "offsetTop": "-5%",
         "offsetStart": "3%"
       }
     }
