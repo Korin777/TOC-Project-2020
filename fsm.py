@@ -332,54 +332,74 @@ class TocMachine(GraphMachine):
         text = event.message.text
         reply_token = event.reply_token
         user_id = event.source.user_id
+        page = 2
+        url = self.driver.getCurrentUrl()
+        
+        self.driver.get(url + "/artworks")
+        time.sleep(3)
+        self.download_url = []
 
         absdate_pattern = r"(ad )+([0-9]*)+(-)+([0-9]*)+(-)+[0-9]*"
         # reldate_pattern = r"(rd )+[0-9]*"
         if((re.fullmatch(absdate_pattern,text.lower())) != None): # 到某個指定日期
-            self.download_url = []
             localtime = time.time()
             # a = "2013-10-10 23:40:00"
             timeArray = time.strptime(text.split(" ")[1]+" 00:00:00", "%Y-%m-%d %H:%M:%S")
             #轉換為時間戳:
             targettime = int(time.mktime(timeArray))
-            picture_url = self.driver.find_elements_by_css_selector("img.rp5asc-10.leQnFG")
-            print(localtime,targettime,len(picture_url))
-            for i in range(len(picture_url)):
-                picture_url[i] = picture_url[i].get_attribute("src")
-                picture_time = picture_url[i][picture_url[i].find("/img/")+5:picture_url[i].find("/img/")+15]
-                picture_time.replace("/","-")
-                print(picture_time)
-                timeArray = time.strptime(picture_time.replace("/","-")+" 00:00:00", "%Y-%m-%d %H:%M:%S")
-                picture_time = int(time.mktime(timeArray))
-                print(picture_time)
-                if(picture_time<targettime):
+            while(True):
+                picture_url = self.driver.find_elements_by_css_selector("img.rp5asc-10.leQnFG")
+                if(len(picture_url) == 0):
                     send_text_message(reply_token,"search end")
                     self.back_id()  
-                    return 
-                picture_url[i] = "https://i.pixiv.cat/img-master" + picture_url[i][picture_url[i].find("/img/"):picture_url[i].rfind("_p0_")] + "_p0_master1200" + picture_url[i][-4:]
-                self.download_url.append(picture_url[i])
-                send_push_message(user_id,ImageSendMessage(original_content_url=picture_url[i],preview_image_url=picture_url[i]))
+                    return                 
+                # print(localtime,targettime,len(picture_url))
+                for i in range(len(picture_url)):
+                    picture_url[i] = picture_url[i].get_attribute("src")
+                    picture_time = picture_url[i][picture_url[i].find("/img/")+5:picture_url[i].find("/img/")+15]
+                    picture_time.replace("/","-")
+                    # print(picture_time)
+                    timeArray = time.strptime(picture_time.replace("/","-")+" 00:00:00", "%Y-%m-%d %H:%M:%S")
+                    picture_time = int(time.mktime(timeArray))
+                    # print(picture_time)
+                    if(picture_time<targettime):
+                        send_text_message(reply_token,"search end")
+                        self.back_id()  
+                        return 
+                    picture_url[i] = "https://i.pixiv.cat/img-master" + picture_url[i][picture_url[i].find("/img/"):picture_url[i].rfind("_p0_")] + "_p0_master1200" + picture_url[i][-4:]
+                    self.download_url.append(picture_url[i])
+                    send_push_message(user_id,ImageSendMessage(original_content_url=picture_url[i],preview_image_url=picture_url[i]))
+                self.driver.get(url + "/artworks?p=" + str(page))
+                time.sleep(3)
+                page += 1
         else: #幾天前
-            self.download_url = []
             localtime = time.time()
             targettime = localtime - int(text.split(" ")[1])*86400
-            picture_url = self.driver.find_elements_by_css_selector("img.rp5asc-10.leQnFG")
-            print(localtime,targettime,len(picture_url))
-            for i in range(len(picture_url)):
-                picture_url[i] = picture_url[i].get_attribute("src")
-                picture_time = picture_url[i][picture_url[i].find("/img/")+5:picture_url[i].find("/img/")+15]
-                picture_time.replace("/","-")
-                print(picture_time)
-                timeArray = time.strptime(picture_time.replace("/","-")+" 00:00:00", "%Y-%m-%d %H:%M:%S")
-                picture_time = int(time.mktime(timeArray))
-                print(picture_time)
-                if(picture_time<targettime):
+            while(True):
+                picture_url = self.driver.find_elements_by_css_selector("img.rp5asc-10.leQnFG")
+                if(len(picture_url) == 0):
                     send_text_message(reply_token,"search end")
                     self.back_id()  
                     return 
-                picture_url[i] = "https://i.pixiv.cat/img-master" + picture_url[i][picture_url[i].find("/img/"):picture_url[i].rfind("_p0_")] + "_p0_master1200" + picture_url[i][-4:]
-                self.download_url.append(picture_url[i])
-                send_push_message(user_id,ImageSendMessage(original_content_url=picture_url[i],preview_image_url=picture_url[i]))
+                print(localtime,targettime,len(picture_url))
+                for i in range(len(picture_url)):
+                    picture_url[i] = picture_url[i].get_attribute("src")
+                    picture_time = picture_url[i][picture_url[i].find("/img/")+5:picture_url[i].find("/img/")+15]
+                    picture_time.replace("/","-")
+                    print(picture_time)
+                    timeArray = time.strptime(picture_time.replace("/","-")+" 00:00:00", "%Y-%m-%d %H:%M:%S")
+                    picture_time = int(time.mktime(timeArray))
+                    print(picture_time)
+                    if(picture_time<targettime):
+                        send_text_message(reply_token,"search end")
+                        self.back_id()  
+                        return 
+                    picture_url[i] = "https://i.pixiv.cat/img-master" + picture_url[i][picture_url[i].find("/img/"):picture_url[i].rfind("_p0_")] + "_p0_master1200" + picture_url[i][-4:]
+                    self.download_url.append(picture_url[i])
+                    send_push_message(user_id,ImageSendMessage(original_content_url=picture_url[i],preview_image_url=picture_url[i]))
+                self.driver.get(url + "/artworks?p=" + str(page))
+                time.sleep(3)
+                page += 1        
         self.back_id()   
         
     def is_going_to_walk_around(self,event):
@@ -506,7 +526,9 @@ class TocMachine(GraphMachine):
                     zf.write('img/'+allFileList[i])
                     os.remove('img/'+allFileList[i])
             send_push_message(user_id, TextSendMessage(text="https://testmylinebot777.herokuapp.com/download  (開無痕視窗輸入網址)"))
-            self.back_artist_artwork()
+        else:
+            send_push_message(user_id, TextSendMessage(text="沒有要下載的圖片"))
+        self.back_artist_artwork()
         
     def is_going_to_fsm(self,event):
         text = event.message.text
