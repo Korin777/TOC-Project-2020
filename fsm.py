@@ -473,7 +473,7 @@ class TocMachine(GraphMachine):
 
         # send_flex_message(reply_token, f"walk_around", walk_around)
         send_push_message(user_id,FlexSendMessage(alt_text='error',contents=walk_around))
-        self.back_pixiv()
+        self.back_pixiv(event)
 
     def is_going_to_download(self,event):
         text = event.message.text
