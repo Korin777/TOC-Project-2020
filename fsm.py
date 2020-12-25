@@ -336,6 +336,7 @@ class TocMachine(GraphMachine):
         url = self.driver.current_url
         
         self.driver.get(url + "/artworks")
+        print(self.driver.current_url)
         time.sleep(3)
         self.download_url = []
 
@@ -349,6 +350,7 @@ class TocMachine(GraphMachine):
             targettime = int(time.mktime(timeArray))
             while(True):
                 picture_url = self.driver.find_elements_by_css_selector("img.rp5asc-10.leQnFG")
+                print(len(picture_url))
                 if(len(picture_url) == 0):
                     send_push_message(user_id, TextSendMessage(text='search end'))
                     # send_text_message(reply_token,"search end")
