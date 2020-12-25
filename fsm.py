@@ -333,7 +333,7 @@ class TocMachine(GraphMachine):
         reply_token = event.reply_token
         user_id = event.source.user_id
         page = 2
-        url = self.driver.getCurrentUrl()
+        url = self.driver.current_url
         
         self.driver.get(url + "/artworks")
         time.sleep(3)
@@ -350,7 +350,8 @@ class TocMachine(GraphMachine):
             while(True):
                 picture_url = self.driver.find_elements_by_css_selector("img.rp5asc-10.leQnFG")
                 if(len(picture_url) == 0):
-                    send_text_message(reply_token,"search end")
+                    send_push_message(user_id, TextSendMessage(text='search end'))
+                    # send_text_message(reply_token,"search end")
                     self.back_id()  
                     return                 
                 # print(localtime,targettime,len(picture_url))
@@ -363,7 +364,8 @@ class TocMachine(GraphMachine):
                     picture_time = int(time.mktime(timeArray))
                     # print(picture_time)
                     if(picture_time<targettime):
-                        send_text_message(reply_token,"search end")
+                        send_push_message(user_id, TextSendMessage(text='search end'))
+                        # send_text_message(reply_token,"search end")
                         self.back_id()  
                         return 
                     picture_url[i] = "https://i.pixiv.cat/img-master" + picture_url[i][picture_url[i].find("/img/"):picture_url[i].rfind("_p0_")] + "_p0_master1200" + picture_url[i][-4:]
@@ -378,7 +380,8 @@ class TocMachine(GraphMachine):
             while(True):
                 picture_url = self.driver.find_elements_by_css_selector("img.rp5asc-10.leQnFG")
                 if(len(picture_url) == 0):
-                    send_text_message(reply_token,"search end")
+                    send_push_message(user_id, TextSendMessage(text='search end'))
+                    # send_text_message(reply_token,"search end")
                     self.back_id()  
                     return 
                 print(localtime,targettime,len(picture_url))
@@ -391,7 +394,8 @@ class TocMachine(GraphMachine):
                     picture_time = int(time.mktime(timeArray))
                     print(picture_time)
                     if(picture_time<targettime):
-                        send_text_message(reply_token,"search end")
+                        send_push_message(user_id, TextSendMessage(text='search end'))
+                        # send_text_message(reply_token,"search end")
                         self.back_id()  
                         return 
                     picture_url[i] = "https://i.pixiv.cat/img-master" + picture_url[i][picture_url[i].find("/img/"):picture_url[i].rfind("_p0_")] + "_p0_master1200" + picture_url[i][-4:]
