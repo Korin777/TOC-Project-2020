@@ -337,7 +337,7 @@ class TocMachine(GraphMachine):
         
         self.driver.get(url + "/artworks")
         print(self.driver.current_url)
-        time.sleep(3)
+        time.sleep(5)
         self.download_url = []
 
         absdate_pattern = r"(ad )+([0-9]*)+(-)+([0-9]*)+(-)+[0-9]*"
@@ -376,7 +376,7 @@ class TocMachine(GraphMachine):
                     self.download_url.append(picture_url[i])
                     send_push_message(user_id,ImageSendMessage(original_content_url=picture_url[i],preview_image_url=picture_url[i]))
                 self.driver.get(url + "/artworks?p=" + str(page))
-                time.sleep(3)
+                time.sleep(5)
                 page += 1
         else: #幾天前
             localtime = time.time()
@@ -408,7 +408,7 @@ class TocMachine(GraphMachine):
                     self.download_url.append(picture_url[i])
                     send_push_message(user_id,ImageSendMessage(original_content_url=picture_url[i],preview_image_url=picture_url[i]))
                 self.driver.get(url + "/artworks?p=" + str(page))
-                time.sleep(3)
+                time.sleep(5)
                 page += 1        
         self.back_id()   
         
