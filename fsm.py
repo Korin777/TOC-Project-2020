@@ -354,6 +354,7 @@ class TocMachine(GraphMachine):
                 if(len(picture_url) == 0):
                     send_push_message(user_id, TextSendMessage(text='search end'))
                     # send_text_message(reply_token,"search end")
+                    self.driver.get(url + "/artworks")
                     self.back_id()  
                     return                 
                 # print(localtime,targettime,len(picture_url))
@@ -367,6 +368,7 @@ class TocMachine(GraphMachine):
                     # print(picture_time)
                     if(picture_time<targettime):
                         send_push_message(user_id, TextSendMessage(text='search end'))
+                        self.driver.get(url + "/artworks")
                         # send_text_message(reply_token,"search end")
                         self.back_id()  
                         return 
@@ -383,6 +385,7 @@ class TocMachine(GraphMachine):
                 picture_url = self.driver.find_elements_by_css_selector("img.rp5asc-10.leQnFG")
                 if(len(picture_url) == 0):
                     send_push_message(user_id, TextSendMessage(text='search end'))
+                    self.driver.get(url + "/artworks")
                     # send_text_message(reply_token,"search end")
                     self.back_id()  
                     return 
@@ -397,6 +400,7 @@ class TocMachine(GraphMachine):
                     print(picture_time)
                     if(picture_time<targettime):
                         send_push_message(user_id, TextSendMessage(text='search end'))
+                        self.driver.get(url + "/artworks")
                         # send_text_message(reply_token,"search end")
                         self.back_id()  
                         return 
