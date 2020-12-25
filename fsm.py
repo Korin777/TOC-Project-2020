@@ -337,7 +337,6 @@ class TocMachine(GraphMachine):
         
         self.driver.get(url + "/artworks")
         print(self.driver.current_url)
-        time.sleep(5)
         self.download_url = []
 
         absdate_pattern = r"(ad )+([0-9]*)+(-)+([0-9]*)+(-)+[0-9]*"
@@ -349,6 +348,10 @@ class TocMachine(GraphMachine):
             #轉換為時間戳:
             targettime = int(time.mktime(timeArray))
             while(True):
+                time.sleep(2)
+                for i in range(4):
+                    self.driver.execute_script("window.scrollTo(0,document.body.scrollHeight/4*"+str(i+1)+")")
+                    time.sleep(1)
                 picture_url = self.driver.find_elements_by_css_selector("img.rp5asc-10.leQnFG")
                 print(len(picture_url))
                 if(len(picture_url) == 0):
@@ -376,12 +379,15 @@ class TocMachine(GraphMachine):
                     self.download_url.append(picture_url[i])
                     send_push_message(user_id,ImageSendMessage(original_content_url=picture_url[i],preview_image_url=picture_url[i]))
                 self.driver.get(url + "/artworks?p=" + str(page))
-                time.sleep(5)
                 page += 1
         else: #幾天前
             localtime = time.time()
             targettime = localtime - int(text.split(" ")[1])*86400
             while(True):
+                time.sleep(2)
+                for i in range(4):
+                    self.driver.execute_script("window.scrollTo(0,document.body.scrollHeight/4*"+str(i+1)+")")
+                    time.sleep(1)
                 picture_url = self.driver.find_elements_by_css_selector("img.rp5asc-10.leQnFG")
                 if(len(picture_url) == 0):
                     send_push_message(user_id, TextSendMessage(text='search end'))
@@ -408,7 +414,6 @@ class TocMachine(GraphMachine):
                     self.download_url.append(picture_url[i])
                     send_push_message(user_id,ImageSendMessage(original_content_url=picture_url[i],preview_image_url=picture_url[i]))
                 self.driver.get(url + "/artworks?p=" + str(page))
-                time.sleep(5)
                 page += 1        
         self.back_id()   
         
