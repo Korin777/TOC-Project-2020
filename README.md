@@ -14,3 +14,6 @@
   heroku config:set LINE_CHANNEL_ACCESS_TOKEN=your_line_channel_access_token
   heroku config:set CHROMEDRIVER_PATH=/app/.chromedriver/bin/chromedriver
   heroku config:set GOOGLE_CHROME_BIN=/app/.apt/usr/bin/google-chrome
+  
+>圖片代理:
+>>src:https://pixiv.cat/
