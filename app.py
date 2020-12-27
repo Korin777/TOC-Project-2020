@@ -109,7 +109,7 @@ class MyWorker():
             print(f"REQUEST BODY: \n{self.body}")
             response = machine.advance(event)
             if response == False:
-                send_text_message(event.reply_token, "Not Entering any State")
+                send_text_message(event.reply_token, "Not Entering any State\ncurrent state:"+str(machine.last_state))
 
 
 
