@@ -242,10 +242,9 @@ class TocMachine(GraphMachine):
                 twitter_url = ""
                 try:
                     tmp_twitter_url = tmp.find_elements_by_tag_name("a")
-                    print(len(tmp_twitter_url))
                     for i in range(len(tmp_twitter_url)):
                         tmp_twitter_url[i] = tmp_twitter_url[i].get_attribute("href")
-                        if(tmp_twitter_url[i].contain("twitter")):
+                        if(tmp_twitter_url[i].find("twitter")!=-1):
                             twitter_url = tmp_twitter_url[i]
                             twitter_url = "https://twitter.com/" + twitter_url[twitter_url.find(".com%2" + "F")+7:]
                             break
