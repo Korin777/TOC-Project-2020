@@ -44,7 +44,7 @@ load_dotenv()
 
 
 machine = TocMachine(driver = driver,#driver2 = driver2,
-    states=["initial", "menu", "pixiv", "find_pixiv_id","instruction","find_artist_artwork","walk_around","download", "fsm"],
+    states=["initial", "demo","menu", "pixiv", "find_pixiv_id","instruction","find_artist_artwork","walk_around","download", "fsm"],
     transitions=[   
         {"trigger": "advance", "source": "initial", "dest": "menu", "conditions": "is_going_to_menu"},
         {"trigger": "advance", "source": ["menu","find_pixiv_id"], "dest": "pixiv", "conditions": "is_going_to_pixiv"},
@@ -55,6 +55,8 @@ machine = TocMachine(driver = driver,#driver2 = driver2,
         {"trigger": "advance", "source": "find_pixiv_id", "dest": "find_artist_artwork", "conditions": "is_going_to_find_artist_artwork"},
         {"trigger": "advance", "source": "pixiv", "dest": "walk_around", "conditions": "is_going_to_walk_around"},
         {"trigger": "advance", "source": "find_pixiv_id", "dest": "download", "conditions": "is_going_to_download"},
+        {"trigger": "advance", "source": "*", "dest": "demo", "conditions": "is_going_to_demo"},
+
 
         {"trigger": "back_artist_artwork", "source": "download", "dest": "find_artist_artwork"},
         {"trigger": "back_pixiv", "source": ["find_pixiv_id","walk_around"], "dest": "pixiv"},

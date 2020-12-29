@@ -566,6 +566,15 @@ class TocMachine(GraphMachine):
         elif(self.last_state == "find_pixiv_id"):
             self.ins_back_find()
 
+    def is_going_to_demo(self,event):
+        text = event.message.text
+
+        return text.lower() == "demo"
+    def on_enter_demo():
+        user_id = event.source.user_id
+        send_push_message(user_id, TextSendMessage(text="demo"))
+
+
 def IsConnection(url):
     """
         檢查連線是否失敗。
