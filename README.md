@@ -17,3 +17,7 @@ Selenium,flask,heroku,transitions<br>
   
 ### 圖片代理:
 src:https://pixiv.cat/
+
+### DEMO
+![image](https://github.com/Korin777/TOC-Project-2020/assets/57750932/64d39c50-2651-4601-bb86-5dafe6bd7c02)
+
